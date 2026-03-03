@@ -1,0 +1,3 @@
+## 2024-03-03 - [Firestore Over-fetching Anti-pattern]
+**Learning:** Found a performance bottleneck where components were fetching all documents from a Firestore collection (`getProducts()`) and then only rendering a small subset (e.g., `productList.slice(0, 8)`). This is a critical issue in Firestore because every read is billed and adds network latency, regardless of how much of the result the client actually uses.
+**Action:** Always use the `limit()` function in Firestore queries when only a specific number of items are needed by the UI. Review all array slicing operations (`.slice()`) on data returned from Firestore to see if the constraint can be pushed down to the database query instead.

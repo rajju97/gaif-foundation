@@ -23,7 +23,9 @@ export default function Layout() {
         const fetchProducts = async () => {
             setLoading(true);
             try {
-                const products = await getProducts();
+                // Bolt: Optimized to fetch only 8 products since the featured section only displays 8.
+                // Prevents over-fetching all products from Firestore, reducing bandwidth and reads.
+                const products = await getProducts(null, 8);
                 setProductList(products);
             } catch (error) {
                 console.error("Failed to fetch products", error);
@@ -115,7 +117,7 @@ export default function Layout() {
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                            {productList.length > 0 ? productList.slice(0, 8).map((product) => (
+                            {productList.length > 0 ? productList.map((product) => (
                                 <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-lg flex flex-col">
                                     <img
                                         src={product.images?.[0] || product.image || "product-jpeg-500x500.webp"}
