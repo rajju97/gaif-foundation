@@ -9,7 +9,8 @@ import {
     deleteDoc,
     query,
     where,
-    serverTimestamp
+    serverTimestamp,
+    limit
 } from "firebase/firestore";
 
 const productsCollection = collection(db, "products");
@@ -26,10 +27,14 @@ export const addProduct = async (productData) => {
     });
 };
 
-export const getProducts = async (sellerId = null) => {
+export const getProducts = async (sellerId = null, limitCount = null) => {
     let q = productsCollection;
-    if (sellerId) {
+    if (sellerId && limitCount) {
+        q = query(productsCollection, where("sellerId", "==", sellerId), limit(limitCount));
+    } else if (sellerId) {
         q = query(productsCollection, where("sellerId", "==", sellerId));
+    } else if (limitCount) {
+        q = query(productsCollection, limit(limitCount));
     }
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(d => ({ ...d.data(), id: d.id }));
