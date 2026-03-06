@@ -1,0 +1,3 @@
+## 2024-11-20 - Derived State Computation Bottleneck in Large Lists
+**Learning:** Found a performance bottleneck specific to this codebase's architecture where extensive lists (like ProductsPage) perform synchronous derived state operations (filtering and sorting) on every render, blocking the main thread.
+**Action:** Always wrap derived state operations such as filtering and sorting in `useMemo` when rendering product catalogs or extensive lists to prevent unnecessary re-evaluations during unrelated re-renders. Additionally, extract repeated invariant computations (e.g., `toLowerCase()`) outside the iteration loop to minimize per-item overhead.
