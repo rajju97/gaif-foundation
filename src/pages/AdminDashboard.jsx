@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getProducts, getAllUsers, getAllOrders, deleteProduct, deleteUser, updateOrderStatus } from '../services/db';
 import { useAuth } from '../context/AuthContext';
 import Notification from '../components/Notification';
@@ -98,9 +98,20 @@ const AdminDashboard = () => {
     }
   };
 
-  const totalRevenue = orders.filter(o => o.status === 'delivered').reduce((sum, o) => sum + (o.total || 0), 0);
-  const sellers = users.filter(u => u.role === 'seller');
-  const customers = users.filter(u => u.role === 'customer');
+  // ⚡ Bolt: Memoize derived lists and extract invariant calculations to prevent main-thread blocking on every render
+  const totalRevenue = useMemo(() => {
+    return orders.reduce((sum, o) => {
+      if (o.status === 'delivered') return sum + (o.total || 0);
+      return sum;
+    }, 0);
+  }, [orders]);
+
+  const sellers = useMemo(() => {
+    return users.reduce((acc, user) => {
+      if (user.role === 'seller') acc.push(user);
+      return acc;
+    }, []);
+  }, [users]);
 
   if (loading) return <div className="flex justify-center items-center h-64"><span className="loading loading-spinner loading-lg"></span></div>;
 
