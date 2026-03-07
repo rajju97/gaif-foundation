@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getProducts, addProduct, deleteProduct, updateProduct, getOrdersBySeller } from '../services/db';
@@ -285,8 +285,20 @@ const SellerDashboard = () => {
   }
 
   // Stats
-  const totalRevenue = orders.filter(o => o.status === 'delivered').reduce((sum, o) => sum + (o.total || 0), 0);
-  const pendingOrders = orders.filter(o => o.status === 'pending').length;
+  // ⚡ Bolt: Memoize derived lists and extract invariant calculations to prevent main-thread blocking on every render
+  const { totalRevenue, pendingOrders } = useMemo(() => {
+    return orders.reduce(
+      (acc, o) => {
+        if (o.status === 'delivered') {
+          acc.totalRevenue += o.total || 0;
+        } else if (o.status === 'pending') {
+          acc.pendingOrders += 1;
+        }
+        return acc;
+      },
+      { totalRevenue: 0, pendingOrders: 0 }
+    );
+  }, [orders]);
 
   return (
     <div className="container mx-auto p-4">

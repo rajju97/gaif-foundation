@@ -1,0 +1,4 @@
+
+## 2023-10-27 - [Derived State Array Reductions]
+**Learning:** This codebase frequently performs multiple sequential, unmemoized `.filter().reduce()` operations over the same source array during render (e.g., in AdminDashboard and SellerDashboard). This blocks the main thread with O(n*m) complexity for deriving multiple states. Furthermore, loop invariant operations like `.toLowerCase()` were being needlessly computed per-element inside `.filter()` operations.
+**Action:** Consolidate array derivations into single-pass `.reduce()` wrappers grouped inside `useMemo()` hooks to transform complexity to O(n) and prevent unneeded re-evaluations. Extract invariants before iteration blocks. Watch for unused array variables (like `customers` in `AdminDashboard`) previously hidden by separate assignments.
