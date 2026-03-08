@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getProducts, getAllUsers, getAllOrders, deleteProduct, deleteUser, updateOrderStatus } from '../services/db';
 import { useAuth } from '../context/AuthContext';
 import Notification from '../components/Notification';
@@ -98,9 +98,25 @@ const AdminDashboard = () => {
     }
   };
 
-  const totalRevenue = orders.filter(o => o.status === 'delivered').reduce((sum, o) => sum + (o.total || 0), 0);
-  const sellers = users.filter(u => u.role === 'seller');
-  const customers = users.filter(u => u.role === 'customer');
+  const totalRevenue = useMemo(() => {
+    return orders.reduce((sum, o) => {
+      if (o.status === 'delivered') {
+        return sum + (o.total || 0);
+      }
+      return sum;
+    }, 0);
+  }, [orders]);
+
+  const { sellers } = useMemo(() => {
+    return users.reduce((acc, user) => {
+      if (user.role === 'seller') {
+        acc.sellers.push(user);
+      } else if (user.role === 'customer') {
+        acc.customers.push(user);
+      }
+      return acc;
+    }, { sellers: [], customers: [] });
+  }, [users]);
 
   if (loading) return <div className="flex justify-center items-center h-64"><span className="loading loading-spinner loading-lg"></span></div>;
 
