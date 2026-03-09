@@ -1,0 +1,3 @@
+## 2024-05-18 - [Optimizing List Filtering and Sorting]
+**Learning:** In React, performing expensive operations like filtering and sorting arrays during render can cause performance issues if not memoized, especially when the source data or criteria change often. Furthermore, executing string manipulations like `.toLowerCase()` inside an array loop (`.filter` or `.map`) incurs unnecessary overhead for every iteration when the string being converted is invariant relative to the loop.
+**Action:** Always wrap derived state computations for arrays (filtering/sorting) in `useMemo`. When deriving constants like lowercase search strings that do not depend on the item being iterated, declare them *outside* of the iterator function.
