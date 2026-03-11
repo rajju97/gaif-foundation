@@ -1,0 +1,3 @@
+## 2024-05-18 - Extract loop invariants and memoize derived state
+**Learning:** In React applications rendering extensive lists (like product catalogs), synchronously iterating arrays on every render blocks the main thread. We identified a bottleneck in `ProductsPage.jsx` where `.toLowerCase()` was repeatedly executed for `searchQuery` and `selectedCategory` within the `.filter` loop for every product, on every render.
+**Action:** Always wrap expensive derived catalog arrays (filtering/sorting) in a `useMemo` hook. Furthermore, extract loop invariant computations (e.g. converting filter criteria strings to lower case) outside the iteration loop to minimize per-item execution overhead.
