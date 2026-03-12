@@ -1,0 +1,3 @@
+## 2024-03-08 - UseMemo for Extensively Filtered Collections
+**Learning:** React component derived states that iterate over large lists (like products catalogs) with multiple `.filter()` and `.sort()` operations will synchronously block the main thread on every state update (e.g., typing in a search bar), causing jank. Extracting invariants (like `toLowerCase()` conversions on the search inputs) outside the `.filter` loop further reduces per-item string manipulation overhead from O(N) to O(1).
+**Action:** Wrap derived list state logic in `useMemo` with minimal dependencies and extract constant transformations outside iteration loops.
