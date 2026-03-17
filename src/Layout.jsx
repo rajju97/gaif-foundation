@@ -222,32 +222,33 @@ export default function Layout() {
                         <div>
                             <h3 className="font-bold mb-3">Quick Links</h3>
                             <ul className="space-y-1 text-sm opacity-80">
-                                <li><a href="/products" className="hover:text-accent">Products</a></li>
-                                <li><a href="/about-us" className="hover:text-accent">About Us</a></li>
-                                <li><a href="/contact" className="hover:text-accent">Contact</a></li>
+                                <li><button type="button" onClick={() => navigate('/products')} className="hover:text-accent">Products</button></li>
+                                <li><button type="button" onClick={() => navigate('/about-us')} className="hover:text-accent">About Us</button></li>
+                                <li><button type="button" onClick={() => navigate('/contact')} className="hover:text-accent">Contact</button></li>
                             </ul>
                         </div>
                         <div>
                             <h3 className="font-bold mb-3">For Sellers</h3>
                             <ul className="space-y-1 text-sm opacity-80">
-                                <li><a href="/register" className="hover:text-accent">Register as Seller</a></li>
-                                <li><a href="/seller-dashboard" className="hover:text-accent">Seller Dashboard</a></li>
+                                <li><button type="button" onClick={() => navigate('/register')} className="hover:text-accent">Register as Seller</button></li>
+                                <li><button type="button" onClick={() => navigate('/seller-dashboard')} className="hover:text-accent">Seller Dashboard</button></li>
                             </ul>
                         </div>
                         <div>
                             <h3 className="font-bold mb-3">Connect</h3>
                             <div className="flex gap-3">
-                                {['facebook', 'twitter', 'instagram', 'youtube'].map(s => (
-                                    <a key={s} href="#" className="hover:text-accent text-lg"><i className={`fab fa-${s}`}></i></a>
-                                ))}
+                                <a href="https://facebook.com" target="_blank" rel="noreferrer" className="hover:text-accent text-lg"><i className="fab fa-facebook"></i></a>
+                                <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover:text-accent text-lg"><i className="fab fa-twitter"></i></a>
+                                <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-accent text-lg"><i className="fab fa-instagram"></i></a>
+                                <a href="https://youtube.com" target="_blank" rel="noreferrer" className="hover:text-accent text-lg"><i className="fab fa-youtube"></i></a>
                             </div>
                         </div>
                     </div>
                     <div className="border-t border-white/20 pt-4 text-center text-sm opacity-80">
                         <p>&copy; 2024 Ganga Agri Innovation Foundation. All rights reserved.</p>
                         <div className="space-x-4 mt-1">
-                            <a href="#" className="hover:text-accent">Privacy Policy</a>
-                            <a href="#" className="hover:text-accent">Terms of Service</a>
+                            <button type="button" onClick={() => navigate('/privacy-policy')} className="hover:text-accent">Privacy Policy</button>
+                            <button type="button" onClick={() => navigate('/terms-of-service')} className="hover:text-accent">Terms of Service</button>
                         </div>
                     </div>
                 </div>

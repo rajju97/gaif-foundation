@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const AboutUs = () => {
     return (
         <div>
@@ -102,8 +104,8 @@ const AboutUs = () => {
             <footer className="bg-soil text-white p-4 text-center">
                 <p>&copy; 2024 Ganga Agri Innovation Foundation. All rights reserved.</p>
                 <div className="space-x-4 mt-2">
-                    <a href="#" className="hover:text-accent">Privacy Policy</a>
-                    <a href="#" className="hover:text-accent">Terms of Service</a>
+                    <Link to="/privacy-policy" className="hover:text-accent">Privacy Policy</Link>
+                    <Link to="/terms-of-service" className="hover:text-accent">Terms of Service</Link>
                 </div>
             </footer>
         </div>
