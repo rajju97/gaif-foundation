@@ -15,6 +15,8 @@ import OrderHistory from './pages/OrderHistory'
 import Profile from './pages/Profile'
 import AboutUs from './pages/AboutUs'
 import Contact from './pages/Contact'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import TermsOfService from './pages/TermsOfService'
 import NotFound from './components/NotFound'
 import { useAuth } from './context/AuthContext'
 
@@ -49,6 +51,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
 
             {/* Buyer Routes (any logged-in user can buy) */}
             <Route path="/cart" element={<Cart />} />

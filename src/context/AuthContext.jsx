@@ -3,6 +3,7 @@ import { auth, db } from '../firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
   signOut,
   onAuthStateChanged
 } from 'firebase/auth';
@@ -44,6 +45,10 @@ export function AuthProvider({ children }) {
     return signOut(auth);
   }
 
+  function resetPassword(email) {
+    return sendPasswordResetEmail(auth, email);
+  }
+
   async function refreshUserRole(uid) {
     const role = await fetchUserRole(uid);
     setUserRole(role);
@@ -71,6 +76,7 @@ export function AuthProvider({ children }) {
     refreshUserRole,
     signup,
     login,
+    resetPassword,
     logout
   };
 

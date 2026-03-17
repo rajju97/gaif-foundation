@@ -237,17 +237,18 @@ export default function Layout() {
                         <div>
                             <h3 className="font-bold mb-3">Connect</h3>
                             <div className="flex gap-3">
-                                {['facebook', 'twitter', 'instagram', 'youtube'].map(s => (
-                                    <a key={s} href="#" className="hover:text-accent text-lg"><i className={`fab fa-${s}`}></i></a>
-                                ))}
+                                <a href="https://facebook.com" target="_blank" rel="noreferrer" className="hover:text-accent text-lg"><i className="fab fa-facebook"></i></a>
+                                <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover:text-accent text-lg"><i className="fab fa-twitter"></i></a>
+                                <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-accent text-lg"><i className="fab fa-instagram"></i></a>
+                                <a href="https://youtube.com" target="_blank" rel="noreferrer" className="hover:text-accent text-lg"><i className="fab fa-youtube"></i></a>
                             </div>
                         </div>
                     </div>
                     <div className="border-t border-white/20 pt-4 text-center text-sm opacity-80">
                         <p>&copy; 2024 Ganga Agri Innovation Foundation. All rights reserved.</p>
                         <div className="space-x-4 mt-1">
-                            <a href="#" className="hover:text-accent">Privacy Policy</a>
-                            <a href="#" className="hover:text-accent">Terms of Service</a>
+                            <a href="/privacy-policy" className="hover:text-accent">Privacy Policy</a>
+                            <a href="/terms-of-service" className="hover:text-accent">Terms of Service</a>
                         </div>
                     </div>
                 </div>
