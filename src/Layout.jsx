@@ -222,16 +222,16 @@ export default function Layout() {
                         <div>
                             <h3 className="font-bold mb-3">Quick Links</h3>
                             <ul className="space-y-1 text-sm opacity-80">
-                                <li><a href="/products" className="hover:text-accent">Products</a></li>
-                                <li><a href="/about-us" className="hover:text-accent">About Us</a></li>
-                                <li><a href="/contact" className="hover:text-accent">Contact</a></li>
+                                <li><button type="button" onClick={() => navigate('/products')} className="hover:text-accent">Products</button></li>
+                                <li><button type="button" onClick={() => navigate('/about-us')} className="hover:text-accent">About Us</button></li>
+                                <li><button type="button" onClick={() => navigate('/contact')} className="hover:text-accent">Contact</button></li>
                             </ul>
                         </div>
                         <div>
                             <h3 className="font-bold mb-3">For Sellers</h3>
                             <ul className="space-y-1 text-sm opacity-80">
-                                <li><a href="/register" className="hover:text-accent">Register as Seller</a></li>
-                                <li><a href="/seller-dashboard" className="hover:text-accent">Seller Dashboard</a></li>
+                                <li><button type="button" onClick={() => navigate('/register')} className="hover:text-accent">Register as Seller</button></li>
+                                <li><button type="button" onClick={() => navigate('/seller-dashboard')} className="hover:text-accent">Seller Dashboard</button></li>
                             </ul>
                         </div>
                         <div>
