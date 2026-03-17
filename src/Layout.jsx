@@ -247,8 +247,8 @@ export default function Layout() {
                     <div className="border-t border-white/20 pt-4 text-center text-sm opacity-80">
                         <p>&copy; 2024 Ganga Agri Innovation Foundation. All rights reserved.</p>
                         <div className="space-x-4 mt-1">
-                            <button type="button" onClick={() => navigate('/privacy-policy')} className="hover:text-accent">Privacy Policy</button>
-                            <button type="button" onClick={() => navigate('/terms-of-service')} className="hover:text-accent">Terms of Service</button>
+                            <a href="/privacy-policy" className="hover:text-accent">Privacy Policy</a>
+                            <a href="/terms-of-service" className="hover:text-accent">Terms of Service</a>
                         </div>
                     </div>
                 </div>

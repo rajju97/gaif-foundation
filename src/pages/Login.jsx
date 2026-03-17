@@ -50,15 +50,9 @@ const Login = () => {
   };
 
   const handleForgotPassword = async () => {
-    const email = getValues('email')?.trim();
+    const email = getValues('email');
     if (!email) {
       setNotification({ message: 'Please enter your email above to reset your password.', type: 'error' });
-      return;
-    }
-
-    const emailPattern = /^\S+@\S+$/i;
-    if (!emailPattern.test(email)) {
-      setNotification({ message: 'Please enter a valid email address.', type: 'error' });
       return;
     }
 
@@ -116,7 +110,7 @@ const Login = () => {
                   type="button"
                   onClick={handleForgotPassword}
                   className="label-text-alt link link-hover"
-                  disabled={resettingPassword || submitting}
+                  disabled={resettingPassword}
                 >
                   {resettingPassword ? 'Sending reset link...' : 'Forgot password?'}
                 </button>
