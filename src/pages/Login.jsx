@@ -5,11 +5,12 @@ import { useAuth } from '../context/AuthContext';
 import Notification from '../components/Notification';
 
 const Login = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const { login, currentUser, userRole, refreshUserRole } = useAuth();
+  const { register, handleSubmit, getValues, formState: { errors } } = useForm();
+  const { login, resetPassword, currentUser, userRole, refreshUserRole } = useAuth();
   const navigate = useNavigate();
   const [notification, setNotification] = useState({ message: '', type: '' });
   const [submitting, setSubmitting] = useState(false);
+  const [resettingPassword, setResettingPassword] = useState(false);
   const [success, setSuccess] = useState(false);
 
   // Redirect already logged-in users away from login page
@@ -48,6 +49,29 @@ const Login = () => {
     }
   };
 
+  const handleForgotPassword = async () => {
+    const email = getValues('email');
+    if (!email) {
+      setNotification({ message: 'Please enter your email above to reset your password.', type: 'error' });
+      return;
+    }
+
+    setNotification({ message: '', type: '' });
+    setResettingPassword(true);
+    try {
+      await resetPassword(email);
+      setNotification({
+        message: 'Password reset link sent. Please check your email inbox.',
+        type: 'success'
+      });
+    } catch (error) {
+      console.error(error);
+      setNotification({ message: 'Could not send reset email. Please verify your email and try again.', type: 'error' });
+    } finally {
+      setResettingPassword(false);
+    }
+  };
+
   return (
     <div className="hero min-h-screen bg-base-200">
         <Notification message={notification.message} type={notification.type} />
@@ -80,9 +104,16 @@ const Login = () => {
                 className={`input input-bordered ${errors.password ? 'input-error' : ''}`}
                 {...register('password', { required: 'Password is required' })}
               />
-               {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
+              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
               <label className="label">
-                <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="label-text-alt link link-hover"
+                  disabled={resettingPassword}
+                >
+                  {resettingPassword ? 'Sending reset link...' : 'Forgot password?'}
+                </button>
               </label>
             </div>
             <div className="form-control mt-6">

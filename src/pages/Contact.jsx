@@ -88,7 +88,9 @@ const Contact = () => {
                                 {['facebook', 'twitter', 'instagram', 'youtube'].map((social) => (
                                     <a
                                         key={social}
-                                        href="#"
+                                        href={`https://${social}.com`}
+                                        target="_blank"
+                                        rel="noreferrer"
                                         className="bg-base-200 p-3 rounded-full hover:bg-primary hover:text-white transition-colors"
                                     >
                                         <i className={`fab fa-${social}`}></i>
@@ -153,8 +155,8 @@ const Contact = () => {
             <footer className="bg-soil text-white p-4 text-center">
                 <p>&copy; 2024 Ganga Agri Innovation Foundation. All rights reserved.</p>
                 <div className="space-x-4 mt-2">
-                    <a href="#" className="hover:text-accent">Privacy Policy</a>
-                    <a href="#" className="hover:text-accent">Terms of Service</a>
+                    <a href="/privacy-policy" className="hover:text-accent">Privacy Policy</a>
+                    <a href="/terms-of-service" className="hover:text-accent">Terms of Service</a>
                 </div>
             </footer>
         </div>
