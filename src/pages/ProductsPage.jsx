@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getProducts } from '../services/db';
 import { addItem } from '../dispatchers';
+
+// Bolt Optimization: Move static categories array outside component to prevent recreation on every render
+const CATEGORIES = ['all', 'Fertilizers', 'Seeds', 'Grains', 'Compost', 'Tools', 'Other'];
 
 const ProductsPage = () => {
     const navigate = useNavigate();
@@ -12,8 +15,6 @@ const ProductsPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [sortBy, setSortBy] = useState('name');
-
-    const categories = ['all', 'Fertilizers', 'Seeds', 'Grains', 'Compost', 'Tools', 'Other'];
 
     useEffect(() => {
         const load = async () => {
@@ -35,22 +36,30 @@ const ProductsPage = () => {
         alert(`${product.name} added to cart!`);
     };
 
-    const filteredProducts = products
-        .filter(p => {
-            const matchesSearch = p.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                p.description?.toLowerCase().includes(searchQuery.toLowerCase());
-            const matchesCategory = selectedCategory === 'all' ||
-                p.category?.toLowerCase() === selectedCategory.toLowerCase();
-            return matchesSearch && matchesCategory;
-        })
-        .sort((a, b) => {
-            switch (sortBy) {
-                case 'price-low': return (a.price || 0) - (b.price || 0);
-                case 'price-high': return (b.price || 0) - (a.price || 0);
-                case 'name': return (a.name || '').localeCompare(b.name || '');
-                default: return 0;
-            }
-        });
+    // Bolt Optimization: Wrap heavy filtering and sorting logic in useMemo to prevent main-thread blocking on every render
+    const filteredProducts = useMemo(() => {
+        // Bolt Optimization: Extract invariant operations outside loop to reduce per-item string operation overhead
+        const lowerSearchQuery = searchQuery.toLowerCase();
+        const lowerSelectedCategory = selectedCategory.toLowerCase();
+        const isAllCategories = selectedCategory === 'all';
+
+        return products
+            .filter(p => {
+                const matchesSearch = p.name?.toLowerCase().includes(lowerSearchQuery) ||
+                    p.description?.toLowerCase().includes(lowerSearchQuery);
+                const matchesCategory = isAllCategories ||
+                    p.category?.toLowerCase() === lowerSelectedCategory;
+                return matchesSearch && matchesCategory;
+            })
+            .sort((a, b) => {
+                switch (sortBy) {
+                    case 'price-low': return (a.price || 0) - (b.price || 0);
+                    case 'price-high': return (b.price || 0) - (a.price || 0);
+                    case 'name': return (a.name || '').localeCompare(b.name || '');
+                    default: return 0;
+                }
+            });
+    }, [products, searchQuery, selectedCategory, sortBy]);
 
     return (
         <div className="container mx-auto p-4">
@@ -79,7 +88,7 @@ const ProductsPage = () => {
                         onChange={(e) => setSelectedCategory(e.target.value)}
                         className="select select-bordered w-full"
                     >
-                        {categories.map(cat => (
+                        {CATEGORIES.map(cat => (
                             <option key={cat} value={cat}>
                                 {cat === 'all' ? 'All Categories' : cat}
                             </option>
