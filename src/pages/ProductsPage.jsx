@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getProducts } from '../services/db';
@@ -35,22 +35,31 @@ const ProductsPage = () => {
         alert(`${product.name} added to cart!`);
     };
 
-    const filteredProducts = products
-        .filter(p => {
-            const matchesSearch = p.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                p.description?.toLowerCase().includes(searchQuery.toLowerCase());
-            const matchesCategory = selectedCategory === 'all' ||
-                p.category?.toLowerCase() === selectedCategory.toLowerCase();
-            return matchesSearch && matchesCategory;
-        })
-        .sort((a, b) => {
-            switch (sortBy) {
-                case 'price-low': return (a.price || 0) - (b.price || 0);
-                case 'price-high': return (b.price || 0) - (a.price || 0);
-                case 'name': return (a.name || '').localeCompare(b.name || '');
-                default: return 0;
-            }
-        });
+    // ⚡ Bolt Performance Optimization: Memoize filtering and sorting to prevent
+    // unnecessary re-calculation on every render. Extracted invariant string
+    // operations to minimize overhead during array iteration.
+    const filteredProducts = useMemo(() => {
+        const lowerSearch = (searchQuery || '').toLowerCase();
+        const lowerCategory = (selectedCategory || '').toLowerCase();
+        const isAllCategory = lowerCategory === 'all';
+
+        return products
+            .filter(p => {
+                const matchesSearch = (p.name || '').toLowerCase().includes(lowerSearch) ||
+                    (p.description || '').toLowerCase().includes(lowerSearch);
+                const matchesCategory = isAllCategory ||
+                    (p.category || '').toLowerCase() === lowerCategory;
+                return matchesSearch && matchesCategory;
+            })
+            .sort((a, b) => {
+                switch (sortBy) {
+                    case 'price-low': return (a.price || 0) - (b.price || 0);
+                    case 'price-high': return (b.price || 0) - (a.price || 0);
+                    case 'name': return (a.name || '').localeCompare(b.name || '');
+                    default: return 0;
+                }
+            });
+    }, [products, searchQuery, selectedCategory, sortBy]);
 
     return (
         <div className="container mx-auto p-4">
