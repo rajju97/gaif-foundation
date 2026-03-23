@@ -1,0 +1,3 @@
+## 2024-05-01 - Avoid implicit map parameter injection
+**Learning:** `Array.map` passes `element, index, array` to its callback. If you pass a function reference (like `files.map(compressImage)`) where the function has optional parameters (`maxWidth`, `quality`), `index` and `array` will mistakenly overwrite those parameters and cause unpredictable behavior.
+**Action:** Always use an explicit arrow function, e.g., `files.map(f => compressImage(f))`, when calling functions with optional arguments.
