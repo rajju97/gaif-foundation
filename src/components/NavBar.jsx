@@ -8,6 +8,7 @@ const NavBar = () => {
     const navigate = useNavigate();
     const itemCount = useSelector((state) => state.cart.itemCount);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
     const { currentUser, userRole, logout } = useAuth();
 
     const closeMobile = () => setIsMobileMenuOpen(false);
@@ -22,135 +23,233 @@ const NavBar = () => {
         }
     };
 
-    const navLinkClass = ({ isActive }) =>
-        isActive ? "text-accent font-bold" : "hover:text-accent transition-colors";
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+            setSearchQuery('');
+        } else {
+            navigate('/products');
+        }
+    };
 
     return (
-        <div>
-            <header className="bg-primary text-white p-4 flex justify-between items-center shadow-lg">
-                <h1 onClick={() => { navigate('/'); closeMobile(); }} className="text-2xl font-bold flex items-center cursor-pointer">
-                    <img src="/gaif_logo.jpeg" alt="GAIF Logo" className="h-12 bg-white rounded-full w-12 mr-2" />
-                    <span className="hidden md:inline">Ganga Agri Innovation Foundation</span>
-                    <span className="md:hidden inline">GAIF</span>
-                </h1>
-
-                {/* Desktop Navigation */}
-                <nav className="hidden lg:flex space-x-4 items-center">
-                    <NavLink to="/" className={navLinkClass}>Home</NavLink>
-                    <NavLink to="/products" className={navLinkClass}>Products</NavLink>
-
-                    {currentUser && (userRole === 'seller' || userRole === 'admin') && (
-                        <NavLink to="/seller-dashboard" className={navLinkClass}>
-                            <i className="fas fa-store mr-1"></i>Seller
-                        </NavLink>
-                    )}
-                    {currentUser && userRole === 'admin' && (
-                        <NavLink to="/admin-dashboard" className={navLinkClass}>
-                            <i className="fas fa-shield-alt mr-1"></i>Admin
-                        </NavLink>
-                    )}
-
-                    <NavLink to="/about-us" className={navLinkClass}>About</NavLink>
-                    <NavLink to="/contact" className={navLinkClass}>Contact</NavLink>
-
-                    <ThemeSwitcher />
-
-                    {!currentUser ? (
-                        <>
-                            <NavLink to="/login" className={navLinkClass}>Login</NavLink>
-                            <NavLink to="/register" className="btn btn-sm btn-accent text-white">Register</NavLink>
-                        </>
-                    ) : (
-                        <div className="dropdown dropdown-end">
-                            <label tabIndex={0} className="flex items-center gap-2 cursor-pointer hover:text-accent">
-                                <div className="bg-white text-primary w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
-                                    {(currentUser.email?.[0] || 'U').toUpperCase()}
-                                </div>
-                                <i className="fas fa-chevron-down text-xs"></i>
-                            </label>
-                            <ul tabIndex={0} className="dropdown-content z-50 menu p-2 shadow-lg bg-base-100 rounded-box w-52 text-base-content mt-2">
-                                <li className="menu-title"><span className="text-xs truncate">{currentUser.email}</span></li>
-                                <li><a onClick={() => navigate('/profile')}><i className="fas fa-user mr-2"></i>My Profile</a></li>
-                                <li><a onClick={() => navigate('/orders')}><i className="fas fa-box mr-2"></i>My Orders</a></li>
-                                <li className="border-t mt-1 pt-1">
-                                    <a onClick={handleLogout} className="text-red-500"><i className="fas fa-sign-out-alt mr-2"></i>Logout</a>
-                                </li>
-                            </ul>
+        <div className="sticky top-0 z-50">
+            {/* Main Header Bar */}
+            <header className="bg-primary text-white shadow-md">
+                <div className="max-w-7xl mx-auto px-4 py-2 flex items-center gap-4">
+                    {/* Logo */}
+                    <div
+                        onClick={() => { navigate('/'); closeMobile(); }}
+                        className="flex items-center gap-2 cursor-pointer flex-shrink-0 min-w-fit"
+                    >
+                        <img src="/gaif_logo.jpeg" alt="GAIF" className="h-10 w-10 rounded-full bg-white object-cover" />
+                        <div className="hidden md:block">
+                            <span className="text-white font-bold text-lg leading-none">GAIF</span>
+                            <p className="text-green-200 text-xs italic leading-none">Agri <span className="text-yellow-300 font-semibold">Foundation</span></p>
                         </div>
-                    )}
+                    </div>
 
-                    {/* Cart */}
-                    <div className="relative">
-                        <NavLink to="/cart" className="hover:text-accent flex items-center space-x-1">
-                            <i className="fas fa-shopping-cart text-lg"></i>
-                        </NavLink>
-                        {itemCount > 0 && (
-                            <span className="absolute -top-2 -right-2 bg-accent text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                                {itemCount}
-                            </span>
+                    {/* Search Bar */}
+                    <form onSubmit={handleSearch} className="flex-1 max-w-2xl">
+                        <div className="flex rounded overflow-hidden shadow-sm">
+                            <input
+                                type="text"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder="Search for seeds, fertilizers, tools and more..."
+                                className="w-full px-4 py-2 text-sm text-gray-800 outline-none"
+                            />
+                            <button
+                                type="submit"
+                                className="bg-soil text-white px-4 py-2 hover:bg-soil-dark transition-colors flex-shrink-0"
+                            >
+                                <i className="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    {/* Right Actions — Desktop */}
+                    <div className="hidden lg:flex items-center gap-1">
+                        {/* Login / User */}
+                        {!currentUser ? (
+                            <div className="dropdown dropdown-end">
+                                <label tabIndex={0} className="flex items-center gap-1 cursor-pointer px-3 py-2 rounded hover:bg-green-dark transition-colors min-w-[80px]">
+                                    <span className="font-semibold text-sm">Login</span>
+                                    <i className="fas fa-chevron-down text-xs mt-0.5"></i>
+                                </label>
+                                <ul tabIndex={0} className="dropdown-content z-50 menu p-2 shadow-lg bg-base-200 text-base-content rounded-box w-52 mt-2">
+                                    <li>
+                                        <button onClick={() => navigate('/login')} className="flex items-center gap-2 text-sm">
+                                            <i className="fas fa-sign-in-alt"></i> Login
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button onClick={() => navigate('/register')} className="flex items-center gap-2 text-sm">
+                                            <i className="fas fa-user-plus"></i> New? Register
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        ) : (
+                            <div className="dropdown dropdown-end">
+                                <label tabIndex={0} className="flex items-center gap-2 cursor-pointer px-3 py-2 rounded hover:bg-green-dark transition-colors">
+                                    <div className="bg-white text-primary w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                                        {(currentUser.email?.[0] || 'U').toUpperCase()}
+                                    </div>
+                                    <span className="text-sm font-medium hidden xl:inline truncate max-w-[100px]">
+                                        {currentUser.email?.split('@')[0]}
+                                    </span>
+                                    <i className="fas fa-chevron-down text-xs"></i>
+                                </label>
+                                <ul tabIndex={0} className="dropdown-content z-50 menu p-2 shadow-lg bg-base-200 text-base-content rounded-box w-52 mt-2">
+                                    <li className="px-3 py-1">
+                                        <span className="text-xs text-gray-500 truncate">{currentUser.email}</span>
+                                    </li>
+                                    <li><button onClick={() => navigate('/profile')} className="flex items-center gap-2 text-sm"><i className="fas fa-user w-4"></i>My Profile</button></li>
+                                    <li><button onClick={() => navigate('/orders')} className="flex items-center gap-2 text-sm"><i className="fas fa-box w-4"></i>My Orders</button></li>
+                                    {(userRole === 'seller' || userRole === 'admin') && (
+                                        <li><button onClick={() => navigate('/seller-dashboard')} className="flex items-center gap-2 text-sm"><i className="fas fa-store w-4"></i>Seller Dashboard</button></li>
+                                    )}
+                                    {userRole === 'admin' && (
+                                        <li><button onClick={() => navigate('/admin-dashboard')} className="flex items-center gap-2 text-sm"><i className="fas fa-shield-alt w-4"></i>Admin Panel</button></li>
+                                    )}
+                                    <li className="border-t border-base-300 mt-1 pt-1">
+                                        <button onClick={handleLogout} className="flex items-center gap-2 text-sm text-red-500"><i className="fas fa-sign-out-alt w-4"></i>Logout</button>
+                                    </li>
+                                </ul>
+                            </div>
                         )}
+
+                        {/* Become a Seller */}
+                        <button
+                            onClick={() => navigate('/register')}
+                            className="px-3 py-2 rounded hover:bg-green-dark transition-colors text-sm font-medium whitespace-nowrap"
+                        >
+                            Become a Seller
+                        </button>
+
+                        {/* Theme Switcher */}
+                        <div className="px-2 py-2">
+                            <ThemeSwitcher />
+                        </div>
+
+                        {/* Cart */}
+                        <NavLink to="/cart" className="flex items-center gap-2 px-3 py-2 rounded hover:bg-green-dark transition-colors relative">
+                            <div className="relative">
+                                <i className="fas fa-shopping-cart text-xl"></i>
+                                {itemCount > 0 && (
+                                    <span className="absolute -top-2 -right-2 bg-secondary text-white rounded-full text-xs w-5 h-5 flex items-center justify-center font-bold">
+                                        {itemCount > 9 ? '9+' : itemCount}
+                                    </span>
+                                )}
+                            </div>
+                            <span className="text-sm font-medium hidden xl:inline">Cart</span>
+                        </NavLink>
+                    </div>
+
+                    {/* Mobile: Theme + Cart + Hamburger */}
+                    <div className="lg:hidden flex items-center gap-2">
+                        <ThemeSwitcher />
+                        <NavLink to="/cart" onClick={closeMobile} className="relative p-2">
+                            <i className="fas fa-shopping-cart text-lg"></i>
+                            {itemCount > 0 && (
+                                <span className="absolute -top-1 -right-1 bg-secondary text-white rounded-full text-xs w-5 h-5 flex items-center justify-center font-bold">
+                                    {itemCount > 9 ? '9+' : itemCount}
+                                </span>
+                            )}
+                        </NavLink>
+                        <button className="p-2 focus:outline-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                            <i className={`fas ${isMobileMenuOpen ? 'fa-times' : 'fa-bars'} text-xl`}></i>
+                        </button>
+                    </div>
+                </div>
+
+                {/* Desktop Nav Strip */}
+                <nav className="hidden lg:block bg-green-dark">
+                    <div className="max-w-7xl mx-auto px-4 flex gap-1 text-sm overflow-x-auto">
+                        {[
+                            { label: 'Home', to: '/', icon: 'fa-home' },
+                            { label: 'All Products', to: '/products', icon: 'fa-th-large' },
+                            { label: 'Fertilizers', to: '/products?category=Fertilizers', icon: 'fa-flask' },
+                            { label: 'Seeds', to: '/products?category=Seeds', icon: 'fa-seedling' },
+                            { label: 'Grains', to: '/products?category=Grains', icon: 'fa-wheat-awn' },
+                            { label: 'Tools', to: '/products?category=Tools', icon: 'fa-tools' },
+                            { label: 'About Us', to: '/about-us', icon: 'fa-info-circle' },
+                            { label: 'Contact', to: '/contact', icon: 'fa-envelope' },
+                        ].map(({ label, to, icon }) => (
+                            <NavLink
+                                key={to}
+                                to={to}
+                                className={({ isActive }) =>
+                                    `flex items-center gap-1.5 px-3 py-2.5 whitespace-nowrap transition-colors ${isActive ? 'text-yellow-300 font-semibold' : 'text-green-100 hover:text-white'}`
+                                }
+                            >
+                                <i className={`fas ${icon} text-xs`}></i>
+                                <span>{label}</span>
+                            </NavLink>
+                        ))}
                     </div>
                 </nav>
-
-                {/* Mobile: Cart + Hamburger */}
-                <div className="lg:hidden flex items-center gap-3">
-                    <ThemeSwitcher />
-                    <div className="relative">
-                        <NavLink to="/cart" className="text-white" onClick={closeMobile}>
-                            <i className="fas fa-shopping-cart text-lg"></i>
-                        </NavLink>
-                        {itemCount > 0 && (
-                            <span className="absolute -top-2 -right-2 bg-accent text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                                {itemCount}
-                            </span>
-                        )}
-                    </div>
-                    <button className="text-white focus:outline-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-                        <span className="text-2xl">
-                            <i className={`fas ${isMobileMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
-                        </span>
-                    </button>
-                </div>
             </header>
 
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
-                <nav className="flex flex-col items-center bg-primary text-white py-4 space-y-3 lg:hidden shadow-lg">
-                    <NavLink to="/" onClick={closeMobile} className={navLinkClass}>Home</NavLink>
-                    <NavLink to="/products" onClick={closeMobile} className={navLinkClass}>Products</NavLink>
-
-                    {currentUser && (userRole === 'seller' || userRole === 'admin') && (
-                        <NavLink to="/seller-dashboard" onClick={closeMobile} className={navLinkClass}>
-                            Seller Dashboard
-                        </NavLink>
-                    )}
-                    {currentUser && userRole === 'admin' && (
-                        <NavLink to="/admin-dashboard" onClick={closeMobile} className={navLinkClass}>
-                            Admin Dashboard
-                        </NavLink>
-                    )}
-
-                    <NavLink to="/about-us" onClick={closeMobile} className={navLinkClass}>About Us</NavLink>
-                    <NavLink to="/contact" onClick={closeMobile} className={navLinkClass}>Contact</NavLink>
-
-                    {!currentUser ? (
-                        <>
-                            <NavLink to="/login" onClick={closeMobile} className={navLinkClass}>Login</NavLink>
-                            <NavLink to="/register" onClick={closeMobile} className={navLinkClass}>Register</NavLink>
-                        </>
-                    ) : (
-                        <>
-                            <NavLink to="/profile" onClick={closeMobile} className={navLinkClass}>
-                                <i className="fas fa-user mr-2"></i>My Profile
+                <nav className="lg:hidden bg-base-200 text-base-content shadow-lg border-t border-base-300">
+                    <div className="flex flex-col py-2">
+                        {[
+                            { label: 'Home', to: '/', icon: 'fa-home' },
+                            { label: 'Products', to: '/products', icon: 'fa-th-large' },
+                            { label: 'About Us', to: '/about-us', icon: 'fa-info-circle' },
+                            { label: 'Contact', to: '/contact', icon: 'fa-envelope' },
+                        ].map(({ label, to, icon }) => (
+                            <NavLink
+                                key={to}
+                                to={to}
+                                onClick={closeMobile}
+                                className={({ isActive }) =>
+                                    `flex items-center gap-3 px-6 py-3 text-sm ${isActive ? 'text-primary font-semibold bg-base-300' : 'hover:bg-base-300'}`
+                                }
+                            >
+                                <i className={`fas ${icon} w-4`}></i>{label}
                             </NavLink>
-                            <NavLink to="/orders" onClick={closeMobile} className={navLinkClass}>
-                                <i className="fas fa-box mr-2"></i>My Orders
-                            </NavLink>
-                            <button onClick={handleLogout} className="hover:text-accent text-red-200">
-                                <i className="fas fa-sign-out-alt mr-2"></i>Logout
-                            </button>
-                        </>
-                    )}
+                        ))}
+
+                        <div className="border-t border-base-300 mt-1 pt-1">
+                            {!currentUser ? (
+                                <>
+                                    <button onClick={() => { navigate('/login'); closeMobile(); }} className="flex items-center gap-3 px-6 py-3 text-sm w-full hover:bg-base-300">
+                                        <i className="fas fa-sign-in-alt w-4"></i>Login
+                                    </button>
+                                    <button onClick={() => { navigate('/register'); closeMobile(); }} className="flex items-center gap-3 px-6 py-3 text-sm w-full hover:bg-base-300">
+                                        <i className="fas fa-user-plus w-4"></i>Register
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <button onClick={() => { navigate('/profile'); closeMobile(); }} className="flex items-center gap-3 px-6 py-3 text-sm w-full hover:bg-base-300">
+                                        <i className="fas fa-user w-4"></i>My Profile
+                                    </button>
+                                    <button onClick={() => { navigate('/orders'); closeMobile(); }} className="flex items-center gap-3 px-6 py-3 text-sm w-full hover:bg-base-300">
+                                        <i className="fas fa-box w-4"></i>My Orders
+                                    </button>
+                                    {(userRole === 'seller' || userRole === 'admin') && (
+                                        <button onClick={() => { navigate('/seller-dashboard'); closeMobile(); }} className="flex items-center gap-3 px-6 py-3 text-sm w-full hover:bg-base-300">
+                                            <i className="fas fa-store w-4"></i>Seller Dashboard
+                                        </button>
+                                    )}
+                                    {userRole === 'admin' && (
+                                        <button onClick={() => { navigate('/admin-dashboard'); closeMobile(); }} className="flex items-center gap-3 px-6 py-3 text-sm w-full hover:bg-base-300">
+                                            <i className="fas fa-shield-alt w-4"></i>Admin Panel
+                                        </button>
+                                    )}
+                                    <button onClick={handleLogout} className="flex items-center gap-3 px-6 py-3 text-sm w-full text-red-500 hover:bg-base-300">
+                                        <i className="fas fa-sign-out-alt w-4"></i>Logout
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    </div>
                 </nav>
             )}
         </div>
