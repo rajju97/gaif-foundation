@@ -1,4 +1,6 @@
-# CLAUDE.md — Agri E-Commerce Frontend Project
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
 
@@ -47,7 +49,10 @@ src/
 │   ├── NavBar.jsx           # Top nav — responsive, role-based menu items, cart badge
 │   ├── Register.jsx         # Registration form with role selection (buyer/seller)
 │   ├── Loader.jsx           # Full-screen loading spinner overlay
-│   └── NotFound.jsx         # 404 page
+│   ├── NotFound.jsx         # 404 page
+│   ├── ConfirmationModal.jsx # Reusable confirm dialog; uses imperative DOM (document.getElementById) to show/hide — NOT React state
+│   ├── ThemeSwitcher.jsx    # Light/dark mode toggle; persists to localStorage via data-theme on <html>
+│   └── Notification.jsx     # Toast for success/error/info messages using DaisyUI toast/alert classes
 │
 ├── context/
 │   └── AuthContext.jsx      # React Context for auth state (currentUser, userRole, signup/login/logout)
@@ -64,7 +69,9 @@ src/
 │   ├── SellerOrders.jsx     # Seller order management
 │   ├── AdminDashboard.jsx   # Admin panel — user and order management
 │   ├── AboutUs.jsx          # Static about page
-│   └── Contact.jsx          # Contact form
+│   ├── Contact.jsx          # Contact form
+│   ├── PrivacyPolicy.jsx    # Static privacy policy page
+│   └── TermsOfService.jsx   # Static terms of service page
 │
 ├── services/
 │   ├── db.js                # Firestore CRUD: products, users, orders, reviews
@@ -80,7 +87,7 @@ src/
 All routes are defined in `src/App.jsx` using React Router v6 `<Routes>` / `<Route>`. Protected routes use the `ProtectedRoute` component which checks `useAuth()` for authentication and role-based access via the `allowedRoles` prop.
 
 **Route groups:**
-- Public: `/`, `/products`, `/product/:id`, `/register`, `/login`, `/about-us`, `/contact`
+- Public: `/`, `/products`, `/product/:id`, `/register`, `/login`, `/about-us`, `/contact`, `/privacy-policy`, `/terms-of-service`
 - Authenticated (any role): `/cart`, `/checkout`, `/orders`, `/profile`
 - Seller + Admin: `/seller-dashboard`, `/seller-orders`
 - Admin only: `/admin-dashboard`
@@ -107,6 +114,10 @@ All Firestore operations are in `src/services/db.js` as standalone async functio
   - `primary` (#4CAF50 — green), `accent`/`secondary` (#1e3778 — navy)
   - `soil` (#795548), `sand` (#A1887F), `cream` (#FAF9F6), `darkGreen` (#2E7D32)
 - Responsive design uses Tailwind breakpoints (`sm:`, `md:`, `lg:`)
+
+### Modal Pattern
+
+`ConfirmationModal` and any future modals use **imperative DOM manipulation** (`document.getElementById('modal-id').showModal()`) to open/close — not React state. This is the established DaisyUI dialog pattern in this codebase; follow it when adding new modals.
 
 ### Forms
 
