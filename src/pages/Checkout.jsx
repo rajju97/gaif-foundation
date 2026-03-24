@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { createOrder, getProductById } from '../services/db';
+import { createOrder, getProductById, getCommissionRate, getGstRate } from '../services/db';
 import { clearCart } from '../dispatchers';
 import Notification from '../components/Notification';
 
@@ -66,8 +66,15 @@ const Checkout = () => {
     const [orderPlaced, setOrderPlaced] = useState(false);
     const [orderId, setOrderId] = useState('');
     const [notification, setNotification] = useState({ message: '', type: '' });
+    const [gstRate, setGstRate] = useState(0.05);
+
+    useEffect(() => {
+        getGstRate().then(setGstRate).catch(() => {});
+    }, []);
 
     const totalPrice = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const gstAmount = parseFloat((totalPrice * gstRate).toFixed(2));
+    const grandTotalDisplay = parseFloat((totalPrice + gstAmount).toFixed(2));
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -80,6 +87,8 @@ const Checkout = () => {
         setPlacing(true);
 
         try {
+            const [commissionRate, currentGstRate] = await Promise.all([getCommissionRate(), getGstRate()]);
+
             // Fetch canonical prices from the database to prevent client-side price manipulation
             const verifiedItems = await Promise.all(
                 cartItems.map(async (item) => {
@@ -114,7 +123,7 @@ const Checkout = () => {
 
                 try {
                     const paymentResponse = await initiateRazorpayPayment({
-                        amount: verifiedTotal,
+                        amount: parseFloat((verifiedTotal * (1 + currentGstRate)).toFixed(2)),
                         buyerEmail: currentUser.email,
                         buyerPhone: formData.phone,
                         buyerName: formData.fullName,
@@ -142,12 +151,22 @@ const Checkout = () => {
             let lastOrderId = '';
             for (const [sellerId, items] of Object.entries(sellerGroups)) {
                 const orderTotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                const commissionAmount = parseFloat((orderTotal * commissionRate).toFixed(2));
+                const sellerEarning = parseFloat((orderTotal - commissionAmount).toFixed(2));
+                const orderGstAmount = parseFloat((orderTotal * currentGstRate).toFixed(2));
+                const grandTotal = parseFloat((orderTotal + orderGstAmount).toFixed(2));
                 const orderRef = await createOrder({
                     buyerId: currentUser.uid,
                     buyerEmail: currentUser.email,
                     sellerId,
                     items,
                     total: orderTotal,
+                    commissionRate,
+                    commissionAmount,
+                    sellerEarning,
+                    gstRate: currentGstRate,
+                    gstAmount: orderGstAmount,
+                    grandTotal,
                     shippingAddress: {
                         fullName: formData.fullName.trim(),
                         phone: formData.phone.trim(),
@@ -312,10 +331,14 @@ const Checkout = () => {
                             <span>Shipping</span>
                             <span className="text-green-600">Free</span>
                         </div>
+                        <div className="flex justify-between mb-2 text-gray-500">
+                            <span>GST ({(gstRate * 100).toFixed(1)}%)</span>
+                            <span>&#8377; {gstAmount.toFixed(2)}</span>
+                        </div>
                         <div className="divider my-2"></div>
                         <div className="flex justify-between font-bold text-lg mb-4">
-                            <span>Total</span>
-                            <span className="text-primary">&#8377; {totalPrice.toFixed(2)}</span>
+                            <span>Grand Total</span>
+                            <span className="text-primary">&#8377; {grandTotalDisplay.toFixed(2)}</span>
                         </div>
 
                         <button type="submit" disabled={placing} className="btn btn-primary w-full">
