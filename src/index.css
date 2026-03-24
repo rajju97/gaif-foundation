@@ -3,3 +3,23 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  body {
+    @apply bg-base-100 text-base-content;
+  }
+}
+
+@layer components {
+  .product-card {
+    @apply bg-base-200 rounded shadow-card overflow-hidden flex flex-col transition-shadow duration-200 hover:shadow-card-hover;
+  }
+  .flipkart-btn-primary {
+    @apply bg-secondary text-white font-semibold px-6 py-2 rounded hover:opacity-90 transition-opacity shadow-sm;
+  }
+  .flipkart-btn-secondary {
+    @apply bg-primary text-white font-semibold px-6 py-2 rounded hover:opacity-90 transition-opacity shadow-sm;
+  }
+}

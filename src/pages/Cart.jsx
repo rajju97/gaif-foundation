@@ -16,13 +16,8 @@ const Cart = () => {
 
     const totalPrice = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-    const handleIncrease = (item) => {
-        dispatch(addItem(item));
-    };
-
-    const handleDecrease = (item) => {
-        dispatch(removeItem(item));
-    };
+    const handleIncrease = (item) => dispatch(addItem(item));
+    const handleDecrease = (item) => dispatch(removeItem(item));
 
     const handleClearCart = () => {
         document.getElementById('clear-cart-modal').showModal();
@@ -44,94 +39,122 @@ const Cart = () => {
 
     if (cartItems.length === 0) {
         return (
-            <div className="container mx-auto p-4 max-w-4xl">
-                 <Notification message={notification.message} type={notification.type} />
-                <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
-                <div className="bg-base-100 rounded-lg shadow-md p-10 text-center">
-                    <i className="fas fa-shopping-cart text-6xl text-gray-300 mb-4"></i>
-                    <h2 className="text-xl text-gray-500 mb-4">Your cart is empty</h2>
-                    <button onClick={() => navigate('/products')} className="btn btn-primary">
-                        Continue Shopping
-                    </button>
+            <div className="bg-base-100 min-h-screen">
+                <Notification message={notification.message} type={notification.type} />
+                <div className="max-w-4xl mx-auto px-4 py-8">
+                    <h1 className="text-2xl font-bold text-base-content mb-6">Shopping Cart</h1>
+                    <div className="bg-base-200 rounded shadow-sm p-16 text-center">
+                        <i className="fas fa-shopping-cart text-6xl text-gray-300 mb-4"></i>
+                        <h2 className="text-xl font-semibold text-base-content mb-2">Your cart is empty!</h2>
+                        <p className="text-gray-400 text-sm mb-6">Add items to it now.</p>
+                        <button onClick={() => navigate('/products')} className="bg-secondary hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded transition-colors">
+                            Shop Now
+                        </button>
+                    </div>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="container mx-auto p-4 max-w-4xl">
+        <div className="bg-base-100 min-h-screen">
             <Notification message={notification.message} type={notification.type} />
             <ConfirmationModal id="clear-cart-modal" title="Clear Cart" message="Are you sure you want to clear all items from your cart?" onConfirm={confirmClearCart} />
-            <h1 className="text-3xl font-bold mb-6">Shopping Cart ({itemCount} items)</h1>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Cart Items */}
-                <div className="lg:col-span-2 space-y-4">
-                    {cartItems.map((item) => (
-                        <div key={item.id} className="bg-base-100 rounded-lg shadow-md p-4 flex flex-col sm:flex-row gap-4">
-                            <img
-                                src={item.images?.[0] || item.image || "product-jpeg-500x500.webp"}
-                                alt={item.name}
-                                className="w-full sm:w-24 h-24 object-cover rounded cursor-pointer"
-                                onClick={() => navigate(`/product/${item.id}`)}
-                            />
-                            <div className="flex-1">
-                                <h3 className="font-semibold text-lg cursor-pointer hover:text-primary" onClick={() => navigate(`/product/${item.id}`)}>
-                                    {item.name}
-                                </h3>
-                                <p className="text-primary font-bold">&#8377; {item.price}</p>
+            <div className="max-w-6xl mx-auto px-4 py-4">
+                <h1 className="text-2xl font-bold text-base-content mb-4">
+                    Shopping Cart
+                    <span className="text-sm font-normal text-gray-400 ml-2">({itemCount} items)</span>
+                </h1>
 
-                                <div className="flex items-center gap-3 mt-2">
-                                    <button
-                                        onClick={() => handleDecrease(item)}
-                                        className="btn btn-xs btn-outline"
-                                    >-</button>
-                                    <span className="font-semibold">{item.quantity}</span>
-                                    <button
-                                        onClick={() => handleIncrease(item)}
-                                        className="btn btn-xs btn-outline"
-                                    >+</button>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    {/* Cart Items */}
+                    <div className="lg:col-span-2 space-y-3">
+                        {cartItems.map((item) => (
+                            <div key={item.id} className="bg-base-200 rounded shadow-sm p-4 flex gap-4">
+                                <img
+                                    src={item.images?.[0] || item.image || "product-jpeg-500x500.webp"}
+                                    alt={item.name}
+                                    className="w-24 h-24 object-contain rounded cursor-pointer flex-shrink-0 bg-base-100 p-1"
+                                    onClick={() => navigate(`/product/${item.id}`)}
+                                />
+                                <div className="flex-1 min-w-0">
+                                    <h3
+                                        className="font-medium text-base-content text-sm cursor-pointer hover:text-primary line-clamp-2"
+                                        onClick={() => navigate(`/product/${item.id}`)}
+                                    >
+                                        {item.name}
+                                    </h3>
+                                    <p className="text-green-600 text-xs mt-0.5">In Stock</p>
+                                    <p className="text-lg font-bold text-base-content mt-1">₹{item.price}</p>
 
-                                    <span className="ml-auto font-bold">
-                                        &#8377; {(item.price * item.quantity).toFixed(2)}
-                                    </span>
+                                    <div className="flex items-center gap-3 mt-2">
+                                        <div className="flex items-center border border-base-300 rounded overflow-hidden">
+                                            <button
+                                                onClick={() => handleDecrease(item)}
+                                                className="px-3 py-1 hover:bg-base-300 text-base-content font-semibold transition-colors"
+                                            >−</button>
+                                            <span className="px-4 py-1 border-x border-base-300 font-semibold text-base-content">{item.quantity}</span>
+                                            <button
+                                                onClick={() => handleIncrease(item)}
+                                                className="px-3 py-1 hover:bg-base-300 text-base-content font-semibold transition-colors"
+                                            >+</button>
+                                        </div>
+                                        <span className="text-sm font-semibold text-base-content ml-auto">
+                                            ₹{(item.price * item.quantity).toFixed(2)}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
 
-                    <button onClick={handleClearCart} className="btn btn-error btn-sm text-white">
-                        <i className="fas fa-trash mr-2"></i> Clear Cart
-                    </button>
-                </div>
-
-                {/* Order Summary */}
-                <div className="bg-base-100 rounded-lg shadow-md p-6 h-fit sticky top-4">
-                    <h2 className="text-xl font-bold mb-4">Order Summary</h2>
-
-                    <div className="space-y-2 mb-4">
-                        <div className="flex justify-between">
-                            <span>Subtotal ({itemCount} items)</span>
-                            <span>&#8377; {totalPrice.toFixed(2)}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span>Shipping</span>
-                            <span className="text-green-600">Free</span>
-                        </div>
-                        <div className="divider my-2"></div>
-                        <div className="flex justify-between font-bold text-lg">
-                            <span>Total</span>
-                            <span className="text-primary">&#8377; {totalPrice.toFixed(2)}</span>
-                        </div>
+                        <button
+                            onClick={handleClearCart}
+                            className="text-sm text-red-500 hover:text-red-600 flex items-center gap-1 transition-colors"
+                        >
+                            <i className="fas fa-trash text-xs"></i> Clear Cart
+                        </button>
                     </div>
 
-                    <button onClick={handleCheckout} className="btn btn-primary w-full">
-                        Proceed to Checkout
-                    </button>
+                    {/* Order Summary */}
+                    <div className="bg-base-200 rounded shadow-sm p-5 h-fit sticky top-20">
+                        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4 border-b border-base-300 pb-3">
+                            Price Details
+                        </h2>
 
-                    <button onClick={() => navigate('/products')} className="btn btn-ghost w-full mt-2">
-                        Continue Shopping
-                    </button>
+                        <div className="space-y-3 text-sm mb-4">
+                            <div className="flex justify-between text-base-content">
+                                <span>Price ({itemCount} items)</span>
+                                <span>₹{totalPrice.toFixed(2)}</span>
+                            </div>
+                            <div className="flex justify-between text-base-content">
+                                <span>Delivery Charges</span>
+                                <span className="text-green-600 font-medium">Free</span>
+                            </div>
+                            <div className="border-t border-base-300 pt-3 flex justify-between font-bold text-base text-base-content">
+                                <span>Total Amount</span>
+                                <span>₹{totalPrice.toFixed(2)}</span>
+                            </div>
+                        </div>
+
+                        <p className="text-xs text-green-600 font-medium mb-4">
+                            <i className="fas fa-tag mr-1"></i>You save ₹0 on this order
+                        </p>
+
+                        <button
+                            onClick={handleCheckout}
+                            className="w-full bg-secondary hover:bg-orange-600 text-white font-semibold py-3 rounded transition-colors text-sm shadow"
+                        >
+                            Place Order
+                        </button>
+
+                        <button
+                            onClick={() => navigate('/products')}
+                            className="w-full mt-2 py-2 text-sm text-primary hover:underline"
+                        >
+                            Continue Shopping
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
