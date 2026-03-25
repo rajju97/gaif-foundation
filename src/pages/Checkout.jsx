@@ -27,7 +27,7 @@ const initiateRazorpayPayment = ({ amount, buyerEmail, buyerPhone, buyerName }) 
                 name: buyerName,
             },
             theme: {
-                color: '#000000',
+                color: '#388E3C',
             },
             handler: (response) => {
                 resolve(response);
