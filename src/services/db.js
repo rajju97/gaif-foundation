@@ -7,6 +7,7 @@ import {
     getDoc,
     updateDoc,
     deleteDoc,
+    setDoc,
     query,
     where,
     serverTimestamp
@@ -96,8 +97,50 @@ export const getAllUsers = async () => {
     return querySnapshot.docs.map(d => ({ ...d.data(), id: d.id }));
 };
 
-export const deleteUser = async (id) => {
+export const deleteUser = async (id, adminUserId) => {
+    const adminDoc = await getDoc(doc(db, "users", adminUserId));
+    if (!adminDoc.exists() || adminDoc.data().role !== 'admin') {
+        throw new Error("Unauthorized: only admins can delete users.");
+    }
     await deleteDoc(doc(db, "users", id));
+};
+
+export const updateUserRole = async (userId, newRole, adminUserId) => {
+    const validRoles = ['customer', 'seller', 'admin'];
+    if (!validRoles.includes(newRole)) throw new Error("Invalid role value.");
+    const adminDoc = await getDoc(doc(db, "users", adminUserId));
+    if (!adminDoc.exists() || adminDoc.data().role !== 'admin') {
+        throw new Error("Unauthorized: only admins can change user roles.");
+    }
+    await updateDoc(doc(db, "users", userId), { role: newRole, updatedAt: serverTimestamp() });
+};
+
+// ── Config ──
+
+export const getCommissionRate = async () => {
+    const snap = await getDoc(doc(db, "config", "commission"));
+    return snap.exists() ? (snap.data().rate ?? 0) : 0;
+};
+
+export const updateCommissionRate = async (rate, adminUserId) => {
+    const adminDoc = await getDoc(doc(db, "users", adminUserId));
+    if (!adminDoc.exists() || adminDoc.data().role !== 'admin') {
+        throw new Error("Unauthorized.");
+    }
+    await setDoc(doc(db, "config", "commission"), { rate: Number(rate), updatedAt: serverTimestamp() });
+};
+
+export const getGstRate = async () => {
+    const snap = await getDoc(doc(db, "config", "gst"));
+    return snap.exists() ? (snap.data().rate ?? 0.05) : 0.05;
+};
+
+export const updateGstRate = async (rate, adminUserId) => {
+    const adminDoc = await getDoc(doc(db, "users", adminUserId));
+    if (!adminDoc.exists() || adminDoc.data().role !== 'admin') {
+        throw new Error("Unauthorized.");
+    }
+    await setDoc(doc(db, "config", "gst"), { rate: Number(rate), updatedAt: serverTimestamp() });
 };
 
 // ── Orders ──
