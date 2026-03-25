@@ -77,10 +77,10 @@ const Login = () => {
         <Notification message={notification.message} type={notification.type} />
       <div className="hero-content flex-col lg:flex-row-reverse">
         <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">Login now!</h1>
+          <h1 className="text-5xl font-bold tracking-display">Login now!</h1>
           <p className="py-6">Access your account to manage your products, track orders, and connect with the agricultural community. Your gateway to a thriving marketplace awaits.</p>
         </div>
-        <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+        <div className="card flex-shrink-0 w-full max-w-sm shadow-ambient-lg bg-surface-lowest">
           <form onSubmit={handleSubmit(onSubmit)} className="card-body">
             <div className="form-control">
               <label className="label">

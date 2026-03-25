@@ -82,11 +82,11 @@ const Profile = () => {
     return (
         <div className="container mx-auto p-4 max-w-2xl">
             <Notification message={notification.message} type={notification.type} />
-            <h1 className="text-3xl font-bold mb-6">My Profile</h1>
+            <h1 className="text-3xl font-bold mb-6 tracking-display">My Profile</h1>
 
-            <div className="bg-base-100 rounded-lg shadow-md p-6">
+            <div className="bg-surface-lowest rounded-ds shadow-ambient p-8">
                 {/* Avatar / Header */}
-                <div className="flex items-center gap-4 mb-6 pb-6 border-b border-base-200">
+                <div className="flex items-center gap-4 mb-6 pb-6">
                     <div className="bg-primary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold">
                         {(currentUser?.email?.[0] || 'U').toUpperCase()}
                     </div>
@@ -161,7 +161,7 @@ const Profile = () => {
                             </div>
                         </div>
 
-                        <div className="border-t pt-4 mt-2 border-base-200">
+                        <div className="pt-6 mt-6">
                             <h3 className="text-sm font-semibold text-base-content mb-3">Address Details</h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="sm:col-span-2">

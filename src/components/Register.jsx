@@ -63,10 +63,10 @@ const RegistrationPage = () => {
         <Notification message={notification.message} type={notification.type} />
       <div className="hero-content flex-col">
         <div className="text-center">
-          <h1 className="text-5xl font-bold">Register Now!</h1>
+          <h1 className="text-5xl font-bold tracking-display">Register Now!</h1>
           <p className="py-6">Join our platform to start buying or selling agricultural products.</p>
         </div>
-        <div className="card flex-shrink-0 w-full max-w-lg shadow-2xl bg-base-100">
+        <div className="card flex-shrink-0 w-full max-w-lg shadow-ambient-lg bg-surface-lowest">
           <form onSubmit={handleSubmit(onSubmit)} className="card-body">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="form-control">
