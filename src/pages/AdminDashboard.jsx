@@ -50,9 +50,9 @@ const AdminDashboard = () => {
         title: 'Delete Product',
         message: 'Are you sure you want to delete this product? This action cannot be undone.',
         onConfirm: () => confirmProductDelete(id),
-        id: 'product-delete-modal'
+        id: 'admin-confirm-modal'
     });
-    document.getElementById('product-delete-modal').showModal();
+    document.getElementById('admin-confirm-modal').showModal();
   };
 
   const confirmProductDelete = async (id) => {
@@ -71,9 +71,9 @@ const AdminDashboard = () => {
         title: 'Delete User',
         message: 'Are you sure you want to delete this user? This action cannot be undone.',
         onConfirm: () => confirmUserDelete(id),
-        id: 'user-delete-modal'
+        id: 'admin-confirm-modal'
     });
-    document.getElementById('user-delete-modal').showModal();
+    document.getElementById('admin-confirm-modal').showModal();
   };
 
   const confirmUserDelete = async (id) => {
@@ -108,7 +108,6 @@ const AdminDashboard = () => {
     <div className="container mx-auto p-4">
         <Notification message={notification.message} type={notification.type} />
         <ConfirmationModal {...modalData} />
-        <ConfirmationModal id="user-delete-modal" title={modalData.title} message={modalData.message} onConfirm={modalData.onConfirm} />
 
       <h1 className="text-3xl font-bold mb-6 tracking-display">Admin Dashboard</h1>
 
@@ -160,7 +159,7 @@ const AdminDashboard = () => {
                 <div key={order.id} className="flex justify-between items-center p-3 hover:bg-surface-container">
                   <div>
                     <p className="font-semibold text-sm">#{order.id.slice(-8).toUpperCase()}</p>
-                    <p className="text-xs text-gray-500">{order.buyerEmail}</p>
+                    <p className="text-xs text-on-surface-variant">{order.buyerEmail}</p>
                   </div>
                   <div className="text-right">
                     <span className={`badge badge-sm ${statusColors[order.status] || 'badge-ghost'}`}>
@@ -170,7 +169,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               ))}
-              {orders.length === 0 && <p className="text-gray-500 text-center py-4">No orders yet</p>}
+              {orders.length === 0 && <p className="text-on-surface-variant text-center py-4">No orders yet</p>}
             </div>
           </div>
 
@@ -182,7 +181,7 @@ const AdminDashboard = () => {
                 <div key={user.id} className="flex justify-between items-center p-3 hover:bg-surface-container">
                   <div className="overflow-hidden">
                     <p className="font-semibold truncate">{user.email}</p>
-                    <p className="text-xs text-gray-500">Role: <span className="uppercase font-bold text-primary">{user.role}</span></p>
+                    <p className="text-xs text-on-surface-variant">Role: <span className="uppercase font-bold text-primary">{user.role}</span></p>
                   </div>
                 </div>
               ))}
@@ -268,7 +267,7 @@ const AdminDashboard = () => {
                   <div>
                     <p className="font-semibold">#{order.id.slice(-8).toUpperCase()}</p>
                     <p className="text-sm text-on-surface-variant">Buyer: {order.buyerEmail}</p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-on-surface-variant/70">
                       {order.createdAt?.seconds
                         ? new Date(order.createdAt.seconds * 1000).toLocaleDateString('en-IN')
                         : 'Processing...'}
@@ -295,7 +294,7 @@ const AdminDashboard = () => {
                 </div>
               </div>
             ))}
-            {orders.length === 0 && <p className="text-gray-500 text-center py-4">No orders yet</p>}
+            {orders.length === 0 && <p className="text-on-surface-variant text-center py-4">No orders yet</p>}
           </div>
         </div>
       )}

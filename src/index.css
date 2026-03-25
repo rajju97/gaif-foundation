@@ -5,6 +5,39 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Design system surface tokens — light/dark */
+:root,
+[data-theme="light"] {
+  --ds-surface: #f9f9f9;
+  --ds-surface-low: #f3f3f3;
+  --ds-surface-container: #eeeeee;
+  --ds-surface-lowest: #ffffff;
+  --ds-surface-high: #e8e8e8;
+  --ds-surface-highest: #e2e2e2;
+  --ds-primary-container: #1b1b1b;
+  --ds-secondary-accent: #0057c0;
+  --ds-secondary-container: #006ff0;
+  --ds-on-surface: #1a1c1c;
+  --ds-on-surface-variant: #4c4546;
+  --ds-on-primary: #ffffff;
+  --ds-outline-variant: #cfc4c5;
+}
+[data-theme="dark"] {
+  --ds-surface: #1a1d23;
+  --ds-surface-low: #22262f;
+  --ds-surface-container: #2d3139;
+  --ds-surface-lowest: #111318;
+  --ds-surface-high: #383c44;
+  --ds-surface-highest: #43474f;
+  --ds-primary-container: #e5e7eb;
+  --ds-secondary-accent: #4d9ef6;
+  --ds-secondary-container: #3b8eea;
+  --ds-on-surface: #e5e7eb;
+  --ds-on-surface-variant: #9ca3af;
+  --ds-on-primary: #000000;
+  --ds-outline-variant: #3d4149;
+}
+
 @layer base {
   html {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -62,8 +95,9 @@
 
   /* Secondary button — white with ghost border */
   .ds-btn-secondary {
-    @apply bg-white font-semibold px-6 py-2.5 rounded-ds transition-colors;
-    color: #1a1c1c;
+    @apply font-semibold px-6 py-2.5 rounded-ds transition-colors;
+    background: var(--ds-surface-lowest);
+    color: var(--ds-on-surface);
     border: 1px solid rgba(207, 196, 197, 0.2);
   }
   .ds-btn-secondary:hover {
@@ -83,6 +117,12 @@
   .ghost-border {
     border: 1px solid rgba(207, 196, 197, 0.2);
   }
+  .ghost-border-x {
+    border-left: 1px solid rgba(207, 196, 197, 0.2);
+    border-right: 1px solid rgba(207, 196, 197, 0.2);
+    border-top: none;
+    border-bottom: none;
+  }
   .ghost-border-hover:hover {
     border-color: rgba(207, 196, 197, 0.6);
   }
@@ -92,6 +132,9 @@
     background: rgba(255, 255, 255, 0.80);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+  }
+  [data-theme="dark"] .glass-surface {
+    background: rgba(34, 38, 47, 0.85);
   }
 
   /* Status chips */

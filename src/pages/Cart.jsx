@@ -94,7 +94,7 @@ const Cart = () => {
                                                 onClick={() => handleDecrease(item)}
                                                 className="px-3 py-1 hover:bg-surface-container text-base-content font-semibold transition-colors"
                                             >−</button>
-                                            <span className="px-4 py-1 ghost-border font-semibold text-base-content" style={{ borderTop: 'none', borderBottom: 'none' }}>{item.quantity}</span>
+                                            <span className="px-4 py-1 ghost-border-x font-semibold text-base-content">{item.quantity}</span>
                                             <button
                                                 onClick={() => handleIncrease(item)}
                                                 className="px-3 py-1 hover:bg-surface-container text-base-content font-semibold transition-colors"
@@ -131,7 +131,7 @@ const Cart = () => {
                                 <span>Delivery Charges</span>
                                 <span className="text-green-600 font-medium">Free</span>
                             </div>
-                            <div className="pt-4 mt-4 flex justify-between font-bold text-base text-base-content" style={{ borderTop: '1px solid rgba(207, 196, 197, 0.2)' }}>
+                            <div className="pt-4 mt-4 flex justify-between font-bold text-base text-base-content" style={{ borderTop: '1px solid var(--ds-outline-variant, rgba(207, 196, 197, 0.2))' }}>
                                 <span>Total Amount</span>
                                 <span>₹{totalPrice.toFixed(2)}</span>
                             </div>

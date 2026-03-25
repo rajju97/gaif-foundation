@@ -13,7 +13,7 @@ const StarRating = ({ rating, onRate, interactive = false }) => {
                 <span
                     key={star}
                     onClick={() => interactive && onRate(star)}
-                    className={`text-lg ${interactive ? 'cursor-pointer hover:scale-110 transition-transform' : ''} ${star <= rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                    className={`text-lg ${interactive ? 'cursor-pointer hover:scale-110 transition-transform' : ''} ${star <= rating ? 'text-yellow-400' : 'text-surface-high'}`}
                 >
                     <i className="fas fa-star"></i>
                 </span>
@@ -224,7 +224,7 @@ const ProductDetail = () => {
                                                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
                                                 className="px-4 py-2 text-lg font-semibold hover:bg-surface-container transition-colors text-base-content"
                                             >−</button>
-                                            <span className="px-5 py-2 ghost-border font-semibold text-base-content min-w-[50px] text-center" style={{ borderTop: 'none', borderBottom: 'none' }}>{quantity}</span>
+                                            <span className="px-5 py-2 ghost-border-x font-semibold text-base-content min-w-[50px] text-center">{quantity}</span>
                                             <button
                                                 onClick={() => setQuantity(Math.min(product.quantity, quantity + 1))}
                                                 className="px-4 py-2 text-lg font-semibold hover:bg-surface-container transition-colors text-base-content"
