@@ -5,11 +5,11 @@ import { addItem } from "./dispatchers";
 import { getProducts } from "./services/db";
 
 const categories = [
-    { name: "Fertilizers", icon: "fa-flask", color: "bg-green-50 text-green-700", border: "border-green-200" },
-    { name: "Seeds", icon: "fa-seedling", color: "bg-emerald-50 text-emerald-700", border: "border-emerald-200" },
-    { name: "Grains", icon: "fa-wheat-awn", color: "bg-yellow-50 text-yellow-700", border: "border-yellow-200" },
-    { name: "Compost", icon: "fa-recycle", color: "bg-amber-50 text-amber-700", border: "border-amber-200" },
-    { name: "Tools", icon: "fa-tools", color: "bg-orange-50 text-orange-700", border: "border-orange-200" },
+    { name: "Fertilizers", icon: "fa-flask", color: "bg-surface-container text-on-surface" },
+    { name: "Seeds", icon: "fa-seedling", color: "bg-surface-container text-on-surface" },
+    { name: "Grains", icon: "fa-wheat-awn", color: "bg-surface-container text-on-surface" },
+    { name: "Compost", icon: "fa-recycle", color: "bg-surface-container text-on-surface" },
+    { name: "Tools", icon: "fa-tools", color: "bg-surface-container text-on-surface" },
 ];
 
 const trustBadges = [
@@ -48,14 +48,14 @@ export default function Layout() {
     return (
         <div className="bg-base-100 min-h-screen">
             {/* Trust Badges Strip */}
-            <div className="bg-base-200 border-b border-base-300 hidden md:block">
-                <div className="max-w-7xl mx-auto px-4 py-2 flex justify-around">
+            <div className="bg-surface-low hidden md:block">
+                <div className="max-w-7xl mx-auto px-4 py-3 flex justify-around">
                     {trustBadges.map((badge) => (
                         <div key={badge.label} className="flex items-center gap-2">
                             <i className={`fas ${badge.icon} text-primary text-sm`}></i>
                             <div>
                                 <p className="text-xs font-semibold text-base-content">{badge.label}</p>
-                                <p className="text-xs text-gray-500">{badge.sub}</p>
+                                <p className="text-xs text-on-surface-variant">{badge.sub}</p>
                             </div>
                         </div>
                     ))}
@@ -74,10 +74,10 @@ export default function Layout() {
                     <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
                     <div className="relative max-w-7xl mx-auto px-6 py-16 flex flex-col justify-center" style={{ minHeight: '380px' }}>
                         <div className="max-w-md">
-                            <span className="inline-block bg-secondary text-white text-xs font-bold px-3 py-1 rounded mb-3 uppercase tracking-wide">
+                            <span className="inline-block bg-secondary text-white text-xs font-bold px-3 py-1 rounded-ds mb-3 uppercase tracking-label">
                                 Fresh From The Farm
                             </span>
-                            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+                            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight tracking-display">
                                 Pure. Natural.<br />
                                 <span className="text-green-400">Farm-Fresh.</span>
                             </h1>
@@ -87,13 +87,13 @@ export default function Layout() {
                             <div className="flex flex-wrap gap-3">
                                 <button
                                     onClick={() => navigate('/products')}
-                                    className="bg-secondary hover:bg-orange-600 text-white px-7 py-3 rounded font-semibold text-sm transition-colors shadow-lg"
+                                    className="ds-btn-primary px-7 py-3 text-sm shadow-lg"
                                 >
                                     <i className="fas fa-shopping-bag mr-2"></i>Shop Now
                                 </button>
                                 <button
                                     onClick={() => navigate('/register')}
-                                    className="bg-white text-primary hover:bg-gray-50 px-7 py-3 rounded font-semibold text-sm transition-colors shadow-lg border border-primary"
+                                    className="bg-white text-on-surface hover:bg-surface-low px-7 py-3 rounded-ds font-semibold text-sm transition-colors shadow-lg ghost-border"
                                 >
                                     <i className="fas fa-store mr-2"></i>Sell on GAIF
                                 </button>
@@ -104,16 +104,16 @@ export default function Layout() {
             </section>
 
             {/* Category Strip */}
-            <section className="bg-base-200 shadow-sm border-y border-base-300">
-                <div className="max-w-7xl mx-auto px-4 py-5">
+            <section className="bg-surface-lowest shadow-ambient">
+                <div className="max-w-7xl mx-auto px-4 py-6">
                     <div className="flex gap-4 overflow-x-auto pb-1 justify-center flex-wrap">
                         {categories.map((cat) => (
                             <button
                                 key={cat.name}
                                 onClick={() => navigate(`/products?category=${cat.name}`)}
-                                className={`flex flex-col items-center gap-2 px-5 py-3 rounded-lg border ${cat.color} ${cat.border} hover:shadow-md transition-all min-w-[90px] flex-shrink-0`}
+                                className={`flex flex-col items-center gap-2 px-5 py-3 rounded-ds ${cat.color} hover:shadow-card-hover transition-all min-w-[90px] flex-shrink-0`}
                             >
-                                <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm">
+                                <div className="w-10 h-10 rounded-full bg-surface-lowest flex items-center justify-center shadow-sm">
                                     <i className={`fas ${cat.icon} text-lg`}></i>
                                 </div>
                                 <span className="text-xs font-semibold whitespace-nowrap">{cat.name}</span>
@@ -121,9 +121,9 @@ export default function Layout() {
                         ))}
                         <button
                             onClick={() => navigate('/products')}
-                            className="flex flex-col items-center gap-2 px-5 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-600 hover:shadow-md transition-all min-w-[90px] flex-shrink-0"
+                            className="flex flex-col items-center gap-2 px-5 py-3 rounded-ds bg-surface-container text-on-surface-variant hover:shadow-card-hover transition-all min-w-[90px] flex-shrink-0"
                         >
-                            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm">
+                            <div className="w-10 h-10 rounded-full bg-surface-lowest flex items-center justify-center shadow-sm">
                                 <i className="fas fa-th-large text-lg"></i>
                             </div>
                             <span className="text-xs font-semibold whitespace-nowrap">View All</span>
@@ -133,17 +133,17 @@ export default function Layout() {
             </section>
 
             {/* Featured Products Section */}
-            <section className="max-w-7xl mx-auto px-4 py-6">
-                <div className="bg-base-200 rounded shadow-sm overflow-hidden">
-                    {/* Section Header — Flipkart style */}
-                    <div className="flex justify-between items-center px-5 py-4 border-b border-base-300">
+            <section className="max-w-7xl mx-auto px-4 py-12">
+                <div className="bg-surface-lowest rounded-ds shadow-ambient overflow-hidden">
+                    {/* Section Header */}
+                    <div className="flex justify-between items-center px-5 py-5">
                         <div>
-                            <h2 className="text-xl font-bold text-base-content">Featured Products</h2>
-                            <p className="text-xs text-gray-500 mt-0.5">Handpicked for you</p>
+                            <h2 className="text-xl font-bold text-base-content tracking-display">Featured Products</h2>
+                            <p className="text-xs text-on-surface-variant mt-0.5">Handpicked for you</p>
                         </div>
                         <button
                             onClick={() => navigate('/products')}
-                            className="bg-primary hover:bg-green-dark text-white text-sm font-semibold px-5 py-2 rounded transition-colors"
+                            className="ds-btn-primary text-sm px-5 py-2"
                         >
                             View All <i className="fas fa-arrow-right ml-1 text-xs"></i>
                         </button>
@@ -154,17 +154,17 @@ export default function Layout() {
                             <span className="loading loading-spinner loading-lg text-primary"></span>
                         </div>
                     ) : productList.length === 0 ? (
-                        <div className="text-center py-16 text-gray-500">
-                            <i className="fas fa-box-open text-5xl mb-3 text-gray-300"></i>
+                        <div className="text-center py-16 text-on-surface-variant">
+                            <i className="fas fa-box-open text-5xl mb-3 text-surface-high"></i>
                             <p className="font-medium">No products yet.</p>
                             <p className="text-sm">Be the first seller to add products!</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-px bg-base-300">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 p-4">
                             {productList.slice(0, 12).map((product) => (
                                 <div
                                     key={product.id}
-                                    className="bg-base-200 flex flex-col hover:shadow-card-hover transition-shadow group"
+                                    className="bg-surface-lowest rounded-ds shadow-ambient flex flex-col hover:shadow-card-hover transition-shadow group"
                                 >
                                     <div
                                         className="relative overflow-hidden cursor-pointer"
@@ -177,13 +177,13 @@ export default function Layout() {
                                         />
                                         {product.quantity <= 0 && (
                                             <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                                                <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">OUT OF STOCK</span>
+                                                <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-ds">OUT OF STOCK</span>
                                             </div>
                                         )}
                                     </div>
                                     <div className="px-3 pb-3 flex flex-col flex-1">
                                         <h3
-                                            className="text-sm font-medium text-base-content line-clamp-2 cursor-pointer hover:text-primary mt-1 leading-snug"
+                                            className="text-sm font-medium text-base-content line-clamp-2 cursor-pointer hover:text-secondary-accent mt-1 leading-snug"
                                             onClick={() => navigate(`/product/${product.id}`)}
                                         >
                                             {product.name}
@@ -195,14 +195,14 @@ export default function Layout() {
                                             {product.quantity > 0 ? (
                                                 <button
                                                     onClick={() => handleAddToCart(product)}
-                                                    className="w-full bg-secondary hover:bg-orange-600 text-white text-xs font-semibold py-2 rounded transition-colors"
+                                                    className="w-full bg-secondary hover:opacity-90 text-white text-xs font-semibold py-2 rounded-ds transition-colors"
                                                 >
                                                     <i className="fas fa-cart-plus mr-1"></i>Add to Cart
                                                 </button>
                                             ) : (
                                                 <button
                                                     onClick={() => navigate(`/product/${product.id}`)}
-                                                    className="w-full bg-gray-200 text-gray-500 text-xs font-semibold py-2 rounded cursor-not-allowed"
+                                                    className="w-full bg-surface-high text-on-surface-variant text-xs font-semibold py-2 rounded-ds cursor-not-allowed"
                                                     disabled
                                                 >
                                                     Out of Stock
@@ -218,9 +218,9 @@ export default function Layout() {
             </section>
 
             {/* How It Works */}
-            <section className="max-w-7xl mx-auto px-4 py-6">
-                <div className="bg-base-200 rounded shadow-sm p-6">
-                    <h2 className="text-xl font-bold text-base-content mb-6 text-center">How It Works</h2>
+            <section className="max-w-7xl mx-auto px-4 py-12">
+                <div className="bg-surface-lowest rounded-ds shadow-ambient p-8">
+                    <h2 className="text-xl font-bold text-base-content mb-8 text-center tracking-display">How It Works</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {[
                             { icon: 'fa-user-plus', step: '01', title: 'Register', desc: 'Create an account as a buyer or seller in seconds.' },
@@ -228,13 +228,13 @@ export default function Layout() {
                             { icon: 'fa-truck', step: '03', title: 'Get Delivered', desc: 'Receive fresh products directly at your doorstep.' },
                         ].map((step) => (
                             <div key={step.step} className="flex items-start gap-4">
-                                <div className="bg-primary text-white w-12 h-12 rounded-full flex items-center justify-center text-lg flex-shrink-0 shadow">
+                                <div className="bg-primary text-on-primary w-12 h-12 rounded-full flex items-center justify-center text-lg flex-shrink-0 shadow-ambient">
                                     <i className={`fas ${step.icon}`}></i>
                                 </div>
                                 <div>
-                                    <p className="text-xs text-gray-400 font-semibold uppercase tracking-widest">Step {step.step}</p>
+                                    <p className="ds-label">Step {step.step}</p>
                                     <h3 className="font-bold text-base-content">{step.title}</h3>
-                                    <p className="text-sm text-gray-500 mt-0.5">{step.desc}</p>
+                                    <p className="text-sm text-on-surface-variant mt-0.5">{step.desc}</p>
                                 </div>
                             </div>
                         ))}
@@ -243,9 +243,9 @@ export default function Layout() {
             </section>
 
             {/* Why Choose Us Banner */}
-            <section className="bg-primary text-white py-10 px-4">
+            <section className="bg-primary text-white py-section px-4">
                 <div className="max-w-7xl mx-auto">
-                    <h2 className="text-xl font-bold text-center mb-6">Why Choose GAIF?</h2>
+                    <h2 className="text-xl font-bold text-center mb-8 tracking-display">Why Choose GAIF?</h2>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                         {[
                             { icon: 'fa-leaf', title: 'Eco-Friendly', desc: 'Sustainable & organic products.' },
@@ -258,7 +258,7 @@ export default function Layout() {
                                     <i className={`fas ${f.icon} text-xl`}></i>
                                 </div>
                                 <h3 className="font-semibold text-sm">{f.title}</h3>
-                                <p className="text-green-100 text-xs mt-0.5">{f.desc}</p>
+                                <p className="text-white/60 text-xs mt-0.5">{f.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -266,15 +266,15 @@ export default function Layout() {
             </section>
 
             {/* CTA for Sellers */}
-            <section className="bg-base-200 border-y border-base-300 py-10 px-4">
+            <section className="bg-surface-low py-section px-4">
                 <div className="max-w-2xl mx-auto text-center">
-                    <h2 className="text-2xl font-bold text-base-content mb-2">Are You a Farmer?</h2>
-                    <p className="text-gray-500 text-sm mb-5">
+                    <h2 className="text-2xl font-bold text-base-content mb-2 tracking-display">Are You a Farmer?</h2>
+                    <p className="text-on-surface-variant text-sm mb-5">
                         Join our platform and sell your products directly to thousands of customers. No middlemen, better prices.
                     </p>
                     <button
                         onClick={() => navigate('/register')}
-                        className="bg-soil hover:bg-soil-dark text-white font-semibold px-8 py-3 rounded shadow transition-colors"
+                        className="ds-btn-primary px-8 py-3 shadow-ambient"
                     >
                         <i className="fas fa-store mr-2"></i>Start Selling Today
                     </button>
@@ -282,7 +282,7 @@ export default function Layout() {
             </section>
 
             {/* Footer */}
-            <footer className="bg-soil text-white py-10 px-4">
+            <footer className="bg-soil text-white py-12 px-4">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-6">
                         <div>
@@ -295,7 +295,7 @@ export default function Layout() {
                             </p>
                         </div>
                         <div>
-                            <h3 className="font-semibold mb-3 text-sm uppercase tracking-wide">Quick Links</h3>
+                            <h3 className="font-semibold mb-3 text-sm uppercase tracking-label">Quick Links</h3>
                             <ul className="space-y-2 text-sm text-white/70">
                                 <li><button onClick={() => navigate('/products')} className="hover:text-white transition-colors">Products</button></li>
                                 <li><button onClick={() => navigate('/about-us')} className="hover:text-white transition-colors">About Us</button></li>
@@ -303,19 +303,19 @@ export default function Layout() {
                             </ul>
                         </div>
                         <div>
-                            <h3 className="font-semibold mb-3 text-sm uppercase tracking-wide">For Sellers</h3>
+                            <h3 className="font-semibold mb-3 text-sm uppercase tracking-label">For Sellers</h3>
                             <ul className="space-y-2 text-sm text-white/70">
                                 <li><button onClick={() => navigate('/register')} className="hover:text-white transition-colors">Register as Seller</button></li>
                                 <li><button onClick={() => navigate('/seller-dashboard')} className="hover:text-white transition-colors">Seller Dashboard</button></li>
                             </ul>
                         </div>
                         <div>
-                            <h3 className="font-semibold mb-3 text-sm uppercase tracking-wide">Connect</h3>
+                            <h3 className="font-semibold mb-3 text-sm uppercase tracking-label">Connect</h3>
                             <div className="flex gap-4 text-lg">
-                                <a href="https://facebook.com" target="_blank" rel="noreferrer" className="hover:text-yellow-300 transition-colors"><i className="fab fa-facebook"></i></a>
-                                <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover:text-yellow-300 transition-colors"><i className="fab fa-twitter"></i></a>
-                                <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-yellow-300 transition-colors"><i className="fab fa-instagram"></i></a>
-                                <a href="https://youtube.com" target="_blank" rel="noreferrer" className="hover:text-yellow-300 transition-colors"><i className="fab fa-youtube"></i></a>
+                                <a href="https://facebook.com" target="_blank" rel="noreferrer" className="hover:text-white/80 transition-colors"><i className="fab fa-facebook"></i></a>
+                                <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover:text-white/80 transition-colors"><i className="fab fa-twitter"></i></a>
+                                <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-white/80 transition-colors"><i className="fab fa-instagram"></i></a>
+                                <a href="https://youtube.com" target="_blank" rel="noreferrer" className="hover:text-white/80 transition-colors"><i className="fab fa-youtube"></i></a>
                             </div>
                         </div>
                     </div>

@@ -107,7 +107,7 @@ const ProductDetail = () => {
     );
     if (!product) return (
         <div className="text-center py-20 bg-base-100">
-            <i className="fas fa-box-open text-5xl text-gray-300 mb-4"></i>
+            <i className="fas fa-box-open text-5xl text-surface-high mb-4"></i>
             <h2 className="text-xl font-semibold text-base-content">Product not found</h2>
             <button onClick={() => navigate('/products')} className="btn btn-primary mt-4">Back to Products</button>
         </div>
@@ -118,22 +118,22 @@ const ProductDetail = () => {
 
     return (
         <div className="bg-base-100 min-h-screen">
-            <div className="max-w-7xl mx-auto px-4 py-4">
+            <div className="max-w-7xl mx-auto px-4 py-6">
                 {/* Breadcrumb */}
-                <nav className="text-xs text-gray-400 mb-4 flex items-center gap-1">
-                    <button onClick={() => navigate('/')} className="hover:text-primary transition-colors">Home</button>
+                <nav className="text-xs text-on-surface-variant mb-4 flex items-center gap-1">
+                    <button onClick={() => navigate('/')} className="hover:text-secondary-accent transition-colors">Home</button>
                     <span>/</span>
-                    <button onClick={() => navigate('/products')} className="hover:text-primary transition-colors">Products</button>
+                    <button onClick={() => navigate('/products')} className="hover:text-secondary-accent transition-colors">Products</button>
                     <span>/</span>
                     <span className="text-base-content truncate max-w-[200px]">{product.name}</span>
                 </nav>
 
-                <div className="bg-base-200 rounded shadow-sm overflow-hidden">
+                <div className="bg-surface-lowest rounded-ds shadow-ambient overflow-hidden">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-0">
                         {/* Image Column */}
-                        <div className="lg:col-span-2 border-r border-base-300">
+                        <div className="lg:col-span-2 bg-surface-low">
                             {/* Main Image */}
-                            <div className="p-4 bg-base-200">
+                            <div className="p-4">
                                 <img
                                     src={displayImage}
                                     alt={product.name}
@@ -142,15 +142,15 @@ const ProductDetail = () => {
                             </div>
                             {/* Thumbnails */}
                             {images.length > 1 && (
-                                <div className="flex gap-2 px-4 pb-3 overflow-x-auto border-t border-base-300 pt-3">
+                                <div className="flex gap-2 px-4 pb-3 overflow-x-auto pt-3">
                                     {images.map((img, index) => (
                                         <button
                                             key={index}
                                             onClick={() => setSelectedImageIndex(index)}
-                                            className={`flex-shrink-0 w-14 h-14 rounded border-2 overflow-hidden transition-all ${
+                                            className={`flex-shrink-0 w-14 h-14 rounded-ds overflow-hidden transition-all ${
                                                 index === selectedImageIndex
-                                                    ? 'border-primary ring-1 ring-primary/30'
-                                                    : 'border-base-300 hover:border-gray-400'
+                                                    ? 'ring-2 ring-secondary-accent'
+                                                    : 'ghost-border ghost-border-hover'
                                             }`}
                                         >
                                             <img src={img} alt={`view ${index + 1}`} className="w-full h-full object-contain p-1" />
@@ -159,13 +159,13 @@ const ProductDetail = () => {
                                 </div>
                             )}
                             {/* Add to Cart — sticky on mobile bottom */}
-                            <div className="px-4 pb-4 flex gap-3 md:hidden border-t border-base-300 pt-3">
+                            <div className="px-4 pb-4 flex gap-3 md:hidden pt-3">
                                 {product.quantity > 0 ? (
-                                    <button onClick={handleAddToCart} className="flex-1 bg-secondary text-white font-semibold py-3 rounded shadow text-sm hover:bg-orange-600 transition-colors">
+                                    <button onClick={handleAddToCart} className="flex-1 bg-secondary text-white font-semibold py-3 rounded-ds shadow-ambient text-sm hover:opacity-90 transition-colors">
                                         <i className="fas fa-cart-plus mr-2"></i>Add to Cart
                                     </button>
                                 ) : (
-                                    <button disabled className="flex-1 bg-gray-200 text-gray-400 font-semibold py-3 rounded text-sm cursor-not-allowed">
+                                    <button disabled className="flex-1 bg-surface-high text-on-surface-variant font-semibold py-3 rounded-ds text-sm cursor-not-allowed">
                                         Out of Stock
                                     </button>
                                 )}
@@ -174,19 +174,19 @@ const ProductDetail = () => {
 
                         {/* Product Info Column */}
                         <div className="lg:col-span-3 p-6">
-                            <h1 className="text-2xl font-medium text-base-content leading-snug">{product.name}</h1>
+                            <h1 className="text-2xl font-medium text-base-content leading-snug tracking-display">{product.name}</h1>
 
                             {/* Rating */}
                             {reviews.length > 0 && (
                                 <div className="flex items-center gap-2 mt-2">
-                                    <span className="inline-flex items-center gap-1 bg-primary text-white text-xs font-bold px-2 py-0.5 rounded">
+                                    <span className="inline-flex items-center gap-1 bg-primary text-on-primary text-xs font-bold px-2 py-0.5 rounded-ds">
                                         {averageRating} <i className="fas fa-star text-xs"></i>
                                     </span>
-                                    <span className="text-xs text-gray-500">{reviews.length} Reviews</span>
+                                    <span className="text-xs text-on-surface-variant">{reviews.length} Reviews</span>
                                 </div>
                             )}
 
-                            <div className="border-t border-base-300 my-4"></div>
+                            <div className="my-6"></div>
 
                             {/* Price */}
                             <div className="flex items-baseline gap-2">
@@ -203,13 +203,13 @@ const ProductDetail = () => {
 
                             {/* Description */}
                             <div className="mt-4">
-                                <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1">Description</h3>
+                                <h3 className="ds-label mb-1">Description</h3>
                                 <p className="text-sm text-base-content leading-relaxed">{product.description}</p>
                             </div>
 
                             {/* Seller */}
                             {product.sellerEmail && (
-                                <div className="mt-3 text-xs text-gray-500">
+                                <div className="mt-3 text-xs text-on-surface-variant">
                                     <i className="fas fa-store mr-1"></i>Sold by: <span className="font-medium">{product.sellerEmail}</span>
                                 </div>
                             )}
@@ -218,29 +218,29 @@ const ProductDetail = () => {
                             {product.quantity > 0 && (
                                 <div className="mt-6 hidden md:block">
                                     <div className="flex items-center gap-4 mb-4">
-                                        <span className="text-sm font-medium text-gray-500">Quantity:</span>
-                                        <div className="flex items-center border border-base-300 rounded overflow-hidden">
+                                        <span className="text-sm font-medium text-on-surface-variant">Quantity:</span>
+                                        <div className="flex items-center ghost-border rounded-ds overflow-hidden">
                                             <button
                                                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                                className="px-4 py-2 text-lg font-semibold hover:bg-base-300 transition-colors text-base-content"
+                                                className="px-4 py-2 text-lg font-semibold hover:bg-surface-container transition-colors text-base-content"
                                             >−</button>
-                                            <span className="px-5 py-2 border-x border-base-300 font-semibold text-base-content min-w-[50px] text-center">{quantity}</span>
+                                            <span className="px-5 py-2 ghost-border font-semibold text-base-content min-w-[50px] text-center" style={{ borderTop: 'none', borderBottom: 'none' }}>{quantity}</span>
                                             <button
                                                 onClick={() => setQuantity(Math.min(product.quantity, quantity + 1))}
-                                                className="px-4 py-2 text-lg font-semibold hover:bg-base-300 transition-colors text-base-content"
+                                                className="px-4 py-2 text-lg font-semibold hover:bg-surface-container transition-colors text-base-content"
                                             >+</button>
                                         </div>
                                     </div>
                                     <div className="flex gap-3">
                                         <button
                                             onClick={handleAddToCart}
-                                            className="flex-1 max-w-xs bg-secondary hover:bg-orange-600 text-white font-semibold py-3 rounded shadow text-sm transition-colors"
+                                            className="flex-1 max-w-xs bg-secondary hover:opacity-90 text-white font-semibold py-3 rounded-ds shadow-ambient text-sm transition-colors"
                                         >
                                             <i className="fas fa-cart-plus mr-2"></i>Add to Cart
                                         </button>
                                         <button
                                             onClick={() => navigate('/checkout')}
-                                            className="flex-1 max-w-xs bg-primary hover:bg-green-dark text-white font-semibold py-3 rounded shadow text-sm transition-colors"
+                                            className="flex-1 max-w-xs ds-btn-primary py-3 text-sm shadow-ambient"
                                         >
                                             <i className="fas fa-bolt mr-2"></i>Buy Now
                                         </button>
@@ -249,19 +249,19 @@ const ProductDetail = () => {
                             )}
 
                             {/* Delivery Info */}
-                            <div className="mt-5 bg-base-100 border border-base-300 rounded p-4 text-sm">
+                            <div className="mt-5 bg-surface-container rounded-ds p-4 text-sm">
                                 <div className="flex items-start gap-3 mb-3">
                                     <i className="fas fa-truck text-primary mt-0.5"></i>
                                     <div>
                                         <span className="font-semibold text-base-content">Free Delivery</span>
-                                        <p className="text-xs text-gray-500">On orders above ₹499</p>
+                                        <p className="text-xs text-on-surface-variant">On orders above ₹499</p>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-3">
                                     <i className="fas fa-undo text-primary mt-0.5"></i>
                                     <div>
                                         <span className="font-semibold text-base-content">7-Day Returns</span>
-                                        <p className="text-xs text-gray-500">Easy return & refund policy</p>
+                                        <p className="text-xs text-on-surface-variant">Easy return & refund policy</p>
                                     </div>
                                 </div>
                             </div>
@@ -270,38 +270,38 @@ const ProductDetail = () => {
                 </div>
 
                 {/* Reviews Section */}
-                <div className="mt-4 bg-base-200 rounded shadow-sm p-6">
-                    <h2 className="text-xl font-bold text-base-content mb-4">
+                <div className="mt-6 bg-surface-lowest rounded-ds shadow-ambient p-8">
+                    <h2 className="text-xl font-bold text-base-content mb-4 tracking-display">
                         Ratings & Reviews
                         {reviews.length > 0 && (
-                            <span className="ml-2 text-sm font-normal text-gray-500">({reviews.length} reviews)</span>
+                            <span className="ml-2 text-sm font-normal text-on-surface-variant">({reviews.length} reviews)</span>
                         )}
                     </h2>
 
                     {/* Overall Rating */}
                     {reviews.length > 0 && (
-                        <div className="flex items-center gap-4 mb-6 p-4 bg-base-100 rounded border border-base-300">
+                        <div className="flex items-center gap-4 mb-6 p-4 bg-surface-container rounded-ds">
                             <div className="text-center">
                                 <p className="text-5xl font-bold text-base-content">{averageRating}</p>
                                 <StarRating rating={Math.round(averageRating)} />
-                                <p className="text-xs text-gray-400 mt-1">{reviews.length} reviews</p>
+                                <p className="text-xs text-on-surface-variant mt-1">{reviews.length} reviews</p>
                             </div>
                         </div>
                     )}
 
                     {/* Write Review Form */}
                     {currentUser && (
-                        <form onSubmit={handleSubmitReview} className="mb-6 p-4 bg-base-100 rounded border border-base-300">
+                        <form onSubmit={handleSubmitReview} className="mb-6 p-4 bg-surface-container rounded-ds">
                             <h3 className="font-semibold text-base-content mb-3">Write a Review</h3>
                             <div className="mb-3">
-                                <label className="block text-sm text-gray-500 mb-1">Your Rating</label>
+                                <label className="block text-sm text-on-surface-variant mb-1">Your Rating</label>
                                 <StarRating rating={reviewRating} onRate={setReviewRating} interactive />
                             </div>
                             <textarea
                                 value={reviewText}
                                 onChange={(e) => setReviewText(e.target.value)}
                                 placeholder="Share your experience with this product..."
-                                className="textarea textarea-bordered w-full mb-3 bg-base-200 text-base-content text-sm"
+                                className="textarea textarea-bordered w-full mb-3 text-base-content text-sm"
                                 rows="3"
                                 required
                             />
@@ -313,19 +313,19 @@ const ProductDetail = () => {
 
                     {/* Reviews List */}
                     {reviews.length === 0 ? (
-                        <div className="text-center py-8 text-gray-400">
+                        <div className="text-center py-8 text-on-surface-variant">
                             <i className="fas fa-comment-slash text-3xl mb-2"></i>
                             <p className="text-sm">No reviews yet. Be the first to review!</p>
                         </div>
                     ) : (
                         <div className="space-y-4">
                             {reviews.map((review) => (
-                                <div key={review.id} className="border-b border-base-300 pb-4 last:border-0">
+                                <div key={review.id} className="pb-4 mb-4 last:mb-0 last:pb-0">
                                     <div className="flex items-center gap-2 mb-1">
-                                        <span className="inline-flex items-center gap-1 bg-primary text-white text-xs font-bold px-1.5 py-0.5 rounded">
+                                        <span className="inline-flex items-center gap-1 bg-primary text-on-primary text-xs font-bold px-1.5 py-0.5 rounded-ds">
                                             {review.rating} <i className="fas fa-star text-xs"></i>
                                         </span>
-                                        <span className="text-xs text-gray-400">{review.userEmail}</span>
+                                        <span className="text-xs text-on-surface-variant">{review.userEmail}</span>
                                     </div>
                                     <p className="text-sm text-base-content">{review.text}</p>
                                 </div>

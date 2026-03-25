@@ -42,12 +42,12 @@ const Cart = () => {
             <div className="bg-base-100 min-h-screen">
                 <Notification message={notification.message} type={notification.type} />
                 <div className="max-w-4xl mx-auto px-4 py-8">
-                    <h1 className="text-2xl font-bold text-base-content mb-6">Shopping Cart</h1>
-                    <div className="bg-base-200 rounded shadow-sm p-16 text-center">
-                        <i className="fas fa-shopping-cart text-6xl text-gray-300 mb-4"></i>
+                    <h1 className="text-2xl font-bold text-base-content mb-6 tracking-display">Shopping Cart</h1>
+                    <div className="bg-surface-lowest rounded-ds shadow-ambient p-16 text-center">
+                        <i className="fas fa-shopping-cart text-6xl text-surface-high mb-4"></i>
                         <h2 className="text-xl font-semibold text-base-content mb-2">Your cart is empty!</h2>
-                        <p className="text-gray-400 text-sm mb-6">Add items to it now.</p>
-                        <button onClick={() => navigate('/products')} className="bg-secondary hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded transition-colors">
+                        <p className="text-on-surface-variant text-sm mb-6">Add items to it now.</p>
+                        <button onClick={() => navigate('/products')} className="ds-btn-primary px-8 py-3">
                             Shop Now
                         </button>
                     </div>
@@ -61,26 +61,26 @@ const Cart = () => {
             <Notification message={notification.message} type={notification.type} />
             <ConfirmationModal id="clear-cart-modal" title="Clear Cart" message="Are you sure you want to clear all items from your cart?" onConfirm={confirmClearCart} />
 
-            <div className="max-w-6xl mx-auto px-4 py-4">
-                <h1 className="text-2xl font-bold text-base-content mb-4">
+            <div className="max-w-6xl mx-auto px-4 py-6">
+                <h1 className="text-2xl font-bold text-base-content mb-4 tracking-display">
                     Shopping Cart
-                    <span className="text-sm font-normal text-gray-400 ml-2">({itemCount} items)</span>
+                    <span className="text-sm font-normal text-on-surface-variant ml-2">({itemCount} items)</span>
                 </h1>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                     {/* Cart Items */}
                     <div className="lg:col-span-2 space-y-3">
                         {cartItems.map((item) => (
-                            <div key={item.id} className="bg-base-200 rounded shadow-sm p-4 flex gap-4">
+                            <div key={item.id} className="bg-surface-lowest rounded-ds shadow-ambient p-5 flex gap-4">
                                 <img
                                     src={item.images?.[0] || item.image || "product-jpeg-500x500.webp"}
                                     alt={item.name}
-                                    className="w-24 h-24 object-contain rounded cursor-pointer flex-shrink-0 bg-base-100 p-1"
+                                    className="w-24 h-24 object-contain rounded-ds cursor-pointer flex-shrink-0 bg-surface-low p-1"
                                     onClick={() => navigate(`/product/${item.id}`)}
                                 />
                                 <div className="flex-1 min-w-0">
                                     <h3
-                                        className="font-medium text-base-content text-sm cursor-pointer hover:text-primary line-clamp-2"
+                                        className="font-medium text-base-content text-sm cursor-pointer hover:text-secondary-accent line-clamp-2"
                                         onClick={() => navigate(`/product/${item.id}`)}
                                     >
                                         {item.name}
@@ -89,15 +89,15 @@ const Cart = () => {
                                     <p className="text-lg font-bold text-base-content mt-1">₹{item.price}</p>
 
                                     <div className="flex items-center gap-3 mt-2">
-                                        <div className="flex items-center border border-base-300 rounded overflow-hidden">
+                                        <div className="flex items-center ghost-border rounded-ds overflow-hidden">
                                             <button
                                                 onClick={() => handleDecrease(item)}
-                                                className="px-3 py-1 hover:bg-base-300 text-base-content font-semibold transition-colors"
+                                                className="px-3 py-1 hover:bg-surface-container text-base-content font-semibold transition-colors"
                                             >−</button>
-                                            <span className="px-4 py-1 border-x border-base-300 font-semibold text-base-content">{item.quantity}</span>
+                                            <span className="px-4 py-1 ghost-border font-semibold text-base-content" style={{ borderTop: 'none', borderBottom: 'none' }}>{item.quantity}</span>
                                             <button
                                                 onClick={() => handleIncrease(item)}
-                                                className="px-3 py-1 hover:bg-base-300 text-base-content font-semibold transition-colors"
+                                                className="px-3 py-1 hover:bg-surface-container text-base-content font-semibold transition-colors"
                                             >+</button>
                                         </div>
                                         <span className="text-sm font-semibold text-base-content ml-auto">
@@ -117,8 +117,8 @@ const Cart = () => {
                     </div>
 
                     {/* Order Summary */}
-                    <div className="bg-base-200 rounded shadow-sm p-5 h-fit sticky top-20">
-                        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4 border-b border-base-300 pb-3">
+                    <div className="bg-surface-lowest rounded-ds shadow-ambient p-6 h-fit sticky top-20">
+                        <h2 className="ds-label mb-4 pb-4">
                             Price Details
                         </h2>
 
@@ -131,7 +131,7 @@ const Cart = () => {
                                 <span>Delivery Charges</span>
                                 <span className="text-green-600 font-medium">Free</span>
                             </div>
-                            <div className="border-t border-base-300 pt-3 flex justify-between font-bold text-base text-base-content">
+                            <div className="pt-4 mt-4 flex justify-between font-bold text-base text-base-content" style={{ borderTop: '1px solid rgba(207, 196, 197, 0.2)' }}>
                                 <span>Total Amount</span>
                                 <span>₹{totalPrice.toFixed(2)}</span>
                             </div>
@@ -143,14 +143,14 @@ const Cart = () => {
 
                         <button
                             onClick={handleCheckout}
-                            className="w-full bg-secondary hover:bg-orange-600 text-white font-semibold py-3 rounded transition-colors text-sm shadow"
+                            className="w-full bg-secondary hover:opacity-90 text-white font-semibold py-3 rounded-ds transition-colors text-sm shadow-ambient"
                         >
                             Place Order
                         </button>
 
                         <button
                             onClick={() => navigate('/products')}
-                            className="w-full mt-2 py-2 text-sm text-primary hover:underline"
+                            className="w-full mt-2 py-2 text-sm text-secondary-accent hover:underline"
                         >
                             Continue Shopping
                         </button>

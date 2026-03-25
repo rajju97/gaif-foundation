@@ -69,7 +69,7 @@ const SellerOrders = () => {
     return (
         <div className="container mx-auto p-4 max-w-5xl">
             <Notification message={notification.message} type={notification.type} />
-            <h1 className="text-3xl font-bold mb-6">Manage Orders</h1>
+            <h1 className="text-3xl font-bold mb-6 tracking-display">Manage Orders</h1>
 
             {/* Filter Tabs */}
             <div className="flex flex-wrap gap-2 mb-6">
@@ -89,26 +89,26 @@ const SellerOrders = () => {
 
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg text-center">
+                <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-ds text-center">
                     <p className="text-2xl font-bold text-yellow-600">{orders.filter(o => o.status === 'pending').length}</p>
                     <p className="text-sm text-base-content/60">Pending</p>
                 </div>
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-center">
+                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-ds text-center">
                     <p className="text-2xl font-bold text-blue-600">{orders.filter(o => o.status === 'confirmed').length}</p>
                     <p className="text-sm text-base-content/60">Confirmed</p>
                 </div>
-                <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg text-center">
+                <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-ds text-center">
                     <p className="text-2xl font-bold text-purple-600">{orders.filter(o => o.status === 'shipped').length}</p>
                     <p className="text-sm text-base-content/60">Shipped</p>
                 </div>
-                <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg text-center">
+                <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-ds text-center">
                     <p className="text-2xl font-bold text-green-600">{orders.filter(o => o.status === 'delivered').length}</p>
                     <p className="text-sm text-base-content/60">Delivered</p>
                 </div>
             </div>
 
             {filteredOrders.length === 0 ? (
-                <div className="bg-base-100 rounded-lg shadow-md p-10 text-center">
+                <div className="bg-surface-lowest rounded-ds shadow-ambient p-10 text-center">
                     <p className="text-base-content/60">No orders found.</p>
                 </div>
             ) : (
@@ -116,7 +116,7 @@ const SellerOrders = () => {
                     {filteredOrders.map((order) => {
                         const nextStatus = getNextStatus(order.status);
                         return (
-                            <div key={order.id} className="bg-base-100 rounded-lg shadow-md p-6">
+                            <div key={order.id} className="bg-surface-lowest rounded-ds shadow-ambient p-6">
                                 <div className="flex flex-wrap justify-between items-start mb-4">
                                     <div>
                                         <p className="font-semibold">Order #{order.id.slice(-8).toUpperCase()}</p>
@@ -147,7 +147,7 @@ const SellerOrders = () => {
 
                                 {/* Shipping Info */}
                                 {order.shippingAddress && (
-                                    <div className="text-sm text-base-content/60 mb-4 p-3 bg-base-200 rounded">
+                                    <div className="text-sm text-base-content/60 mb-4 p-3 bg-surface-container rounded-ds">
                                         <p className="font-medium text-base-content">Ship to:</p>
                                         <p>{order.shippingAddress.fullName}, {order.shippingAddress.phone}</p>
                                         <p>{order.shippingAddress.address}</p>
@@ -155,7 +155,7 @@ const SellerOrders = () => {
                                     </div>
                                 )}
 
-                                <div className="text-sm text-base-content/60 mb-4 p-3 bg-base-200 rounded">
+                                <div className="text-sm text-base-content/60 mb-4 p-3 bg-surface-container rounded-ds">
                                     <p className="font-medium text-base-content flex items-center gap-2">
                                         Payment: {order.paymentMethod === 'online' ? 'Online' : 'Cash on Delivery'}
                                         {order.paymentStatus === 'paid' && (

@@ -110,29 +110,29 @@ const AdminDashboard = () => {
         <ConfirmationModal {...modalData} />
         <ConfirmationModal id="user-delete-modal" title={modalData.title} message={modalData.message} onConfirm={modalData.onConfirm} />
 
-      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-6 tracking-display">Admin Dashboard</h1>
 
       {/* Stats Overview */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-        <div className="bg-base-100 p-4 rounded-lg shadow text-center">
+        <div className="bg-surface-lowest p-5 rounded-ds shadow-ambient text-center">
           <p className="text-2xl font-bold text-blue-600">{users.length}</p>
-          <p className="text-sm text-gray-500">Total Users</p>
+          <p className="text-sm text-on-surface-variant">Total Users</p>
         </div>
-        <div className="bg-base-100 p-4 rounded-lg shadow text-center">
+        <div className="bg-surface-lowest p-5 rounded-ds shadow-ambient text-center">
           <p className="text-2xl font-bold text-purple-600">{sellers.length}</p>
-          <p className="text-sm text-gray-500">Sellers</p>
+          <p className="text-sm text-on-surface-variant">Sellers</p>
         </div>
-        <div className="bg-base-100 p-4 rounded-lg shadow text-center">
+        <div className="bg-surface-lowest p-5 rounded-ds shadow-ambient text-center">
           <p className="text-2xl font-bold text-primary">{products.length}</p>
-          <p className="text-sm text-gray-500">Products</p>
+          <p className="text-sm text-on-surface-variant">Products</p>
         </div>
-        <div className="bg-base-100 p-4 rounded-lg shadow text-center">
+        <div className="bg-surface-lowest p-5 rounded-ds shadow-ambient text-center">
           <p className="text-2xl font-bold text-yellow-600">{orders.length}</p>
-          <p className="text-sm text-gray-500">Orders</p>
+          <p className="text-sm text-on-surface-variant">Orders</p>
         </div>
-        <div className="bg-base-100 p-4 rounded-lg shadow text-center">
+        <div className="bg-surface-lowest p-5 rounded-ds shadow-ambient text-center">
           <p className="text-2xl font-bold text-green-600">&#8377;{totalRevenue.toFixed(0)}</p>
-          <p className="text-sm text-gray-500">Revenue</p>
+          <p className="text-sm text-on-surface-variant">Revenue</p>
         </div>
       </div>
 
@@ -153,11 +153,11 @@ const AdminDashboard = () => {
       {activeTab === 'overview' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Recent Orders */}
-          <div className="bg-base-100 p-6 rounded shadow-md">
+          <div className="bg-surface-lowest p-6 rounded-ds shadow-ambient">
             <h2 className="text-xl font-semibold mb-4">Recent Orders</h2>
             <div className="space-y-2 max-h-[400px] overflow-y-auto">
               {orders.slice(0, 10).map(order => (
-                <div key={order.id} className="flex justify-between items-center p-3 border-b border-base-200 hover:bg-base-200">
+                <div key={order.id} className="flex justify-between items-center p-3 hover:bg-surface-container">
                   <div>
                     <p className="font-semibold text-sm">#{order.id.slice(-8).toUpperCase()}</p>
                     <p className="text-xs text-gray-500">{order.buyerEmail}</p>
@@ -175,11 +175,11 @@ const AdminDashboard = () => {
           </div>
 
           {/* Recent Users */}
-          <div className="bg-base-100 p-6 rounded shadow-md">
+          <div className="bg-surface-lowest p-6 rounded-ds shadow-ambient">
             <h2 className="text-xl font-semibold mb-4">Users Overview</h2>
             <div className="space-y-2 max-h-[400px] overflow-y-auto">
               {users.slice(0, 10).map(user => (
-                <div key={user.id} className="flex justify-between items-center p-3 border-b border-base-200 hover:bg-base-200">
+                <div key={user.id} className="flex justify-between items-center p-3 hover:bg-surface-container">
                   <div className="overflow-hidden">
                     <p className="font-semibold truncate">{user.email}</p>
                     <p className="text-xs text-gray-500">Role: <span className="uppercase font-bold text-primary">{user.role}</span></p>
@@ -193,7 +193,7 @@ const AdminDashboard = () => {
 
       {/* Users Tab */}
       {activeTab === 'users' && (
-        <div className="bg-base-100 p-6 rounded shadow-md">
+        <div className="bg-surface-lowest p-6 rounded-ds shadow-ambient">
           <h2 className="text-xl font-semibold mb-4">All Users ({users.length})</h2>
           <div className="overflow-x-auto">
             <table className="table w-full">
@@ -224,7 +224,7 @@ const AdminDashboard = () => {
 
       {/* Products Tab */}
       {activeTab === 'products' && (
-        <div className="bg-base-100 p-6 rounded shadow-md">
+        <div className="bg-surface-lowest p-6 rounded-ds shadow-ambient">
           <h2 className="text-xl font-semibold mb-4">All Products ({products.length})</h2>
           <div className="overflow-x-auto">
             <table className="table w-full">
@@ -259,15 +259,15 @@ const AdminDashboard = () => {
 
       {/* Orders Tab */}
       {activeTab === 'orders' && (
-        <div className="bg-base-100 p-6 rounded shadow-md">
+        <div className="bg-surface-lowest p-6 rounded-ds shadow-ambient">
           <h2 className="text-xl font-semibold mb-4">All Orders ({orders.length})</h2>
           <div className="space-y-4 max-h-[600px] overflow-y-auto">
             {orders.map(order => (
-              <div key={order.id} className="p-4 border-b border-base-200 hover:bg-base-200">
+              <div key={order.id} className="p-4 hover:bg-surface-container">
                 <div className="flex flex-wrap justify-between items-start mb-2">
                   <div>
                     <p className="font-semibold">#{order.id.slice(-8).toUpperCase()}</p>
-                    <p className="text-sm text-gray-500">Buyer: {order.buyerEmail}</p>
+                    <p className="text-sm text-on-surface-variant">Buyer: {order.buyerEmail}</p>
                     <p className="text-xs text-gray-400">
                       {order.createdAt?.seconds
                         ? new Date(order.createdAt.seconds * 1000).toLocaleDateString('en-IN')

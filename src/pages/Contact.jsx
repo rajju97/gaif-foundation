@@ -27,57 +27,57 @@ const Contact = () => {
     return (
         <div>
             {/* Hero */}
-            <section className="bg-accent text-white py-16 px-4 text-center">
-                <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
+            <section className="bg-primary text-white py-section px-4 text-center">
+                <h1 className="text-4xl font-bold mb-4 tracking-display">Contact Us</h1>
                 <p className="max-w-2xl mx-auto text-lg">
                     Have questions? We would love to hear from you. Reach out and we will get back to you as soon as possible.
                 </p>
             </section>
 
-            <section className="container mx-auto py-12 px-4 max-w-6xl">
+            <section className="container mx-auto py-section px-4 max-w-6xl">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Contact Info */}
                     <div>
-                        <h2 className="text-2xl font-bold mb-6">Get in Touch</h2>
+                        <h2 className="text-2xl font-bold mb-6 tracking-display">Get in Touch</h2>
 
                         <div className="space-y-6">
                             <div className="flex items-start gap-4">
-                                <div className="bg-primary text-white p-3 rounded-full">
+                                <div className="bg-primary text-on-primary p-3 rounded-full">
                                     <i className="fas fa-map-marker-alt"></i>
                                 </div>
                                 <div>
                                     <h3 className="font-semibold">Address</h3>
-                                    <p className="text-base-content/80">Ganga Agri Innovation Foundation, New Delhi, India</p>
+                                    <p className="text-on-surface-variant">Ganga Agri Innovation Foundation, New Delhi, India</p>
                                 </div>
                             </div>
 
                             <div className="flex items-start gap-4">
-                                <div className="bg-primary text-white p-3 rounded-full">
+                                <div className="bg-primary text-on-primary p-3 rounded-full">
                                     <i className="fas fa-phone"></i>
                                 </div>
                                 <div>
                                     <h3 className="font-semibold">Phone</h3>
-                                    <p className="text-base-content/80">+91 XXXXX XXXXX</p>
+                                    <p className="text-on-surface-variant">+91 XXXXX XXXXX</p>
                                 </div>
                             </div>
 
                             <div className="flex items-start gap-4">
-                                <div className="bg-primary text-white p-3 rounded-full">
+                                <div className="bg-primary text-on-primary p-3 rounded-full">
                                     <i className="fas fa-envelope"></i>
                                 </div>
                                 <div>
                                     <h3 className="font-semibold">Email</h3>
-                                    <p className="text-base-content/80">info@gaif.org</p>
+                                    <p className="text-on-surface-variant">info@gaif.org</p>
                                 </div>
                             </div>
 
                             <div className="flex items-start gap-4">
-                                <div className="bg-primary text-white p-3 rounded-full">
+                                <div className="bg-primary text-on-primary p-3 rounded-full">
                                     <i className="fas fa-clock"></i>
                                 </div>
                                 <div>
                                     <h3 className="font-semibold">Working Hours</h3>
-                                    <p className="text-base-content/80">Mon - Sat: 9:00 AM - 6:00 PM</p>
+                                    <p className="text-on-surface-variant">Mon - Sat: 9:00 AM - 6:00 PM</p>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +92,7 @@ const Contact = () => {
                                         href={`https://${social}.com`}
                                         target="_blank"
                                         rel="noreferrer"
-                                        className="bg-base-200 p-3 rounded-full hover:bg-primary hover:text-white transition-colors"
+                                        className="bg-surface-container p-3 rounded-full hover:bg-primary hover:text-white transition-colors"
                                     >
                                         <i className={`fab fa-${social}`}></i>
                                     </a>
@@ -102,7 +102,7 @@ const Contact = () => {
                     </div>
 
                     {/* Contact Form */}
-                    <div className="bg-base-100 p-8 rounded-lg shadow-md">
+                    <div className="bg-surface-lowest p-8 rounded-ds shadow-ambient">
                         <h2 className="text-2xl font-bold mb-6">Send a Message</h2>
 
                         <Notification message={notification.message} type={notification.type} />
@@ -156,8 +156,8 @@ const Contact = () => {
             <footer className="bg-soil text-white p-4 text-center">
                 <p>&copy; 2024 Ganga Agri Innovation Foundation. All rights reserved.</p>
                 <div className="space-x-4 mt-2">
-                    <a href="/privacy-policy" className="hover:text-accent">Privacy Policy</a>
-                    <a href="/terms-of-service" className="hover:text-accent">Terms of Service</a>
+                    <a href="/privacy-policy" className="hover:text-white/80">Privacy Policy</a>
+                    <a href="/terms-of-service" className="hover:text-white/80">Terms of Service</a>
                 </div>
             </footer>
         </div>

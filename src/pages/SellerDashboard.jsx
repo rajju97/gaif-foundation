@@ -294,7 +294,7 @@ const SellerDashboard = () => {
         <ConfirmationModal {...modalData} />
 
       <div className="flex flex-wrap justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Seller Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-display">Seller Dashboard</h1>
         <button onClick={() => navigate('/seller-orders')} className="btn btn-primary btn-sm">
           <i className="fas fa-box mr-2"></i> Manage Orders
           {pendingOrders > 0 && <span className="badge badge-warning ml-2">{pendingOrders}</span>}
@@ -303,19 +303,19 @@ const SellerDashboard = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-base-100 p-4 rounded-lg shadow text-center">
+        <div className="bg-surface-lowest p-5 rounded-ds shadow-ambient text-center">
           <p className="text-2xl font-bold text-primary">{products.length}</p>
           <p className="text-sm text-base-content/60">Products</p>
         </div>
-        <div className="bg-base-100 p-4 rounded-lg shadow text-center">
+        <div className="bg-surface-lowest p-5 rounded-ds shadow-ambient text-center">
           <p className="text-2xl font-bold text-blue-600">{orders.length}</p>
           <p className="text-sm text-base-content/60">Total Orders</p>
         </div>
-        <div className="bg-base-100 p-4 rounded-lg shadow text-center">
+        <div className="bg-surface-lowest p-5 rounded-ds shadow-ambient text-center">
           <p className="text-2xl font-bold text-yellow-600">{pendingOrders}</p>
           <p className="text-sm text-base-content/60">Pending</p>
         </div>
-        <div className="bg-base-100 p-4 rounded-lg shadow text-center">
+        <div className="bg-surface-lowest p-5 rounded-ds shadow-ambient text-center">
           <p className="text-2xl font-bold text-green-600">&#8377;{totalRevenue.toFixed(0)}</p>
           <p className="text-sm text-base-content/60">Revenue</p>
         </div>
@@ -323,7 +323,7 @@ const SellerDashboard = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Add/Edit Product Form */}
-        <div className="bg-base-100 p-6 rounded shadow-md h-fit">
+        <div className="bg-surface-lowest p-8 rounded-ds shadow-ambient h-fit">
           <h2 className="text-xl font-semibold mb-4">
             {editingId ? 'Edit Product' : 'Add New Product'}
           </h2>
@@ -441,7 +441,7 @@ const SellerDashboard = () => {
         </div>
 
         {/* Product List */}
-        <div className="bg-base-100 p-6 rounded shadow-md h-fit">
+        <div className="bg-surface-lowest p-8 rounded-ds shadow-ambient h-fit">
           <h2 className="text-xl font-semibold mb-4">Your Products ({products.length})</h2>
           {loading ? <div className="flex justify-center items-center"><span className="loading loading-spinner loading-lg"></span></div> : (
             products.length === 0 ? <p className="text-base-content/60">No products added yet.</p> : (
@@ -450,7 +450,7 @@ const SellerDashboard = () => {
                   const displayImage = product.images?.[0] || product.image || 'product-jpeg-500x500.webp';
                   const imageCount = product.images?.length || (product.image ? 1 : 0);
                   return (
-                    <div key={product.id} className="flex flex-col sm:flex-row items-center justify-between p-4 border border-base-200 rounded shadow-sm hover:bg-base-200 gap-4">
+                    <div key={product.id} className="flex flex-col sm:flex-row items-center justify-between p-4 bg-surface-container rounded-ds shadow-ambient hover:shadow-card-hover gap-4">
                       <div className="flex items-center gap-4 w-full">
                         <div className="relative">
                           <img src={displayImage} alt={product.name}

@@ -43,12 +43,12 @@ const OrderHistory = () => {
 
     return (
         <div className="container mx-auto p-4 max-w-4xl">
-            <h1 className="text-3xl font-bold mb-6">My Orders</h1>
+            <h1 className="text-3xl font-bold mb-6 tracking-display">My Orders</h1>
 
             {orders.length === 0 ? (
-                <div className="bg-white rounded-lg shadow-md p-10 text-center">
-                    <i className="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
-                    <h2 className="text-xl text-gray-500 mb-4">No orders yet</h2>
+                <div className="bg-surface-lowest rounded-ds shadow-ambient p-10 text-center">
+                    <i className="fas fa-box-open text-6xl text-surface-high mb-4"></i>
+                    <h2 className="text-xl text-on-surface-variant mb-4">No orders yet</h2>
                     <button onClick={() => navigate('/products')} className="btn btn-primary">
                         Start Shopping
                     </button>
@@ -56,11 +56,11 @@ const OrderHistory = () => {
             ) : (
                 <div className="space-y-4">
                     {orders.map((order) => (
-                        <div key={order.id} className="bg-white rounded-lg shadow-md p-6">
+                        <div key={order.id} className="bg-surface-lowest rounded-ds shadow-ambient p-6">
                             <div className="flex flex-wrap justify-between items-start mb-4">
                                 <div>
-                                    <p className="text-sm text-gray-500">Order #{order.id.slice(-8).toUpperCase()}</p>
-                                    <p className="text-xs text-gray-400">
+                                    <p className="text-sm text-on-surface-variant">Order #{order.id.slice(-8).toUpperCase()}</p>
+                                    <p className="text-xs text-on-surface-variant/70">
                                         {order.createdAt?.seconds
                                             ? new Date(order.createdAt.seconds * 1000).toLocaleDateString('en-IN', {
                                                 day: 'numeric', month: 'long', year: 'numeric'
@@ -83,7 +83,7 @@ const OrderHistory = () => {
                                         />
                                         <div className="flex-1">
                                             <p className="font-medium">{item.name}</p>
-                                            <p className="text-sm text-gray-500">Qty: {item.quantity} x &#8377;{item.price}</p>
+                                            <p className="text-sm text-on-surface-variant">Qty: {item.quantity} x &#8377;{item.price}</p>
                                         </div>
                                         <p className="font-semibold">&#8377;{(item.price * item.quantity).toFixed(2)}</p>
                                     </div>
@@ -93,7 +93,7 @@ const OrderHistory = () => {
                             <div className="divider my-3"></div>
 
                             <div className="flex justify-between items-center">
-                                <div className="text-sm text-gray-500">
+                                <div className="text-sm text-on-surface-variant">
                                     <p className="flex items-center gap-2">
                                         Payment: {order.paymentMethod === 'online' ? 'Online' : 'Cash on Delivery'}
                                         {order.paymentStatus === 'paid' && (
@@ -101,7 +101,7 @@ const OrderHistory = () => {
                                         )}
                                     </p>
                                     {order.paymentId && (
-                                        <p className="text-xs text-gray-400">Txn: {order.paymentId}</p>
+                                        <p className="text-xs text-on-surface-variant/70">Txn: {order.paymentId}</p>
                                     )}
                                     {order.shippingAddress && (
                                         <p>Ship to: {order.shippingAddress.city}, {order.shippingAddress.state}</p>
