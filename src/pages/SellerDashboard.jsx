@@ -285,7 +285,7 @@ const SellerDashboard = () => {
   }
 
   // Stats
-  const totalRevenue = orders.filter(o => o.status === 'delivered').reduce((sum, o) => sum + (o.total || 0), 0);
+  const totalRevenue = orders.filter(o => o.status === 'delivered').reduce((sum, o) => sum + (o.sellerEarning ?? o.total ?? 0), 0);
   const pendingOrders = orders.filter(o => o.status === 'pending').length;
 
   return (
@@ -318,6 +318,7 @@ const SellerDashboard = () => {
         <div className="bg-surface-lowest p-5 rounded-ds shadow-ambient text-center">
           <p className="text-2xl font-bold text-green-600">&#8377;{totalRevenue.toFixed(0)}</p>
           <p className="text-sm text-base-content/60">Revenue</p>
+          <p className="text-xs text-gray-400">After platform fee</p>
         </div>
       </div>
 

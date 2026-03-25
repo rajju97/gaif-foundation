@@ -168,7 +168,15 @@ const SellerOrders = () => {
                                 </div>
 
                                 <div className="flex flex-wrap justify-between items-center">
-                                    <p className="text-lg font-bold text-primary">Total: &#8377;{order.total?.toFixed(2)}</p>
+                                    <div>
+                                        <p className="text-lg font-bold text-primary">Net Payout: &#8377;{(order.sellerEarning ?? order.total)?.toFixed(2)}</p>
+                                        {order.commissionAmount > 0 && (
+                                            <p className="text-xs text-gray-400">Platform fee: &#8377;{order.commissionAmount?.toFixed(2)} ({(order.commissionRate * 100)?.toFixed(1)}%)</p>
+                                        )}
+                                        {order.gstAmount > 0 && (
+                                            <p className="text-xs text-gray-400">GST collected: &#8377;{order.gstAmount?.toFixed(2)} (paid by buyer)</p>
+                                        )}
+                                    </div>
                                     <div className="flex gap-2">
                                         {nextStatus && (
                                             <button

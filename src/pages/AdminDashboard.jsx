@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getProducts, getAllUsers, getAllOrders, deleteProduct, deleteUser, updateOrderStatus } from '../services/db';
+import { getProducts, getAllUsers, getAllOrders, deleteProduct, deleteUser, updateOrderStatus, updateUserRole, getCommissionRate, updateCommissionRate, getGstRate, updateGstRate } from '../services/db';
 import { useAuth } from '../context/AuthContext';
 import Notification from '../components/Notification';
 import ConfirmationModal from '../components/ConfirmationModal';
@@ -21,6 +21,8 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [notification, setNotification] = useState({ message: '', type: '' });
   const [modalData, setModalData] = useState({ title: '', message: '', onConfirm: null, id: '' });
+  const [commissionRate, setCommissionRate] = useState(0);
+  const [gstRate, setGstRate] = useState(0.05);
 
   useEffect(() => {
     loadData();
@@ -29,14 +31,18 @@ const AdminDashboard = () => {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [productsData, usersData, ordersData] = await Promise.all([
+      const [productsData, usersData, ordersData, commRate, gst] = await Promise.all([
         getProducts(),
         getAllUsers(),
         getAllOrders(),
+        getCommissionRate(),
+        getGstRate(),
       ]);
       setProducts(productsData);
       setUsers(usersData);
       setOrders(ordersData);
+      setCommissionRate(commRate);
+      setGstRate(gst);
     } catch (error) {
       console.error("Error loading admin data:", error);
       setNotification({ message: 'Failed to load data.', type: 'error' });
@@ -78,7 +84,7 @@ const AdminDashboard = () => {
 
   const confirmUserDelete = async (id) => {
     try {
-      await deleteUser(id);
+      await deleteUser(id, currentUser.uid);
       setNotification({ message: 'User deleted successfully.', type: 'success' });
       loadData();
     } catch (e) {
@@ -98,9 +104,39 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleSaveCommission = async () => {
+    try {
+      await updateCommissionRate(commissionRate, currentUser.uid);
+      setNotification({ message: 'Commission rate updated.', type: 'success' });
+    } catch (e) {
+      console.error(e);
+      setNotification({ message: 'Failed to update commission rate.', type: 'error' });
+    }
+  };
+
+  const handleSaveGst = async () => {
+    try {
+      await updateGstRate(gstRate, currentUser.uid);
+      setNotification({ message: 'GST rate updated.', type: 'success' });
+    } catch (e) {
+      console.error(e);
+      setNotification({ message: 'Failed to update GST rate.', type: 'error' });
+    }
+  };
+
+  const handleRoleChange = async (userId, newRole) => {
+    try {
+      await updateUserRole(userId, newRole, currentUser.uid);
+      setNotification({ message: `User role updated to ${newRole}.`, type: 'success' });
+      loadData();
+    } catch (e) {
+      console.error(e);
+      setNotification({ message: 'Failed to update user role.', type: 'error' });
+    }
+  };
+
   const totalRevenue = orders.filter(o => o.status === 'delivered').reduce((sum, o) => sum + (o.total || 0), 0);
   const sellers = users.filter(u => u.role === 'seller');
-  const customers = users.filter(u => u.role === 'customer');
 
   if (loading) return <div className="flex justify-center items-center h-64"><span className="loading loading-spinner loading-lg"></span></div>;
 
@@ -112,8 +148,8 @@ const AdminDashboard = () => {
       <h1 className="text-3xl font-bold mb-6 tracking-display">Admin Dashboard</h1>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-        <div className="bg-surface-lowest p-5 rounded-ds shadow-ambient text-center">
+      <div className="grid grid-cols-2 md:grid-cols-7 gap-4 mb-6">
+        <div className="bg-base-100 p-4 rounded-lg shadow text-center">
           <p className="text-2xl font-bold text-blue-600">{users.length}</p>
           <p className="text-sm text-on-surface-variant">Total Users</p>
         </div>
@@ -132,6 +168,43 @@ const AdminDashboard = () => {
         <div className="bg-surface-lowest p-5 rounded-ds shadow-ambient text-center">
           <p className="text-2xl font-bold text-green-600">&#8377;{totalRevenue.toFixed(0)}</p>
           <p className="text-sm text-on-surface-variant">Revenue</p>
+        </div>
+        <div className="bg-base-100 p-4 rounded-lg shadow text-center">
+          <p className="text-2xl font-bold text-orange-600">&#8377;{orders.filter(o => o.status === 'delivered').reduce((s, o) => s + (o.commissionAmount || 0), 0).toFixed(0)}</p>
+          <p className="text-sm text-gray-500">Commission</p>
+        </div>
+        <div className="bg-base-100 p-4 rounded-lg shadow text-center">
+          <p className="text-2xl font-bold text-teal-600">&#8377;{orders.filter(o => o.status === 'delivered').reduce((s, o) => s + (o.gstAmount || 0), 0).toFixed(0)}</p>
+          <p className="text-sm text-gray-500">GST Collected</p>
+        </div>
+      </div>
+
+      {/* Platform Settings */}
+      <div className="bg-base-100 p-4 rounded-lg shadow mb-6">
+        <h2 className="font-semibold mb-3">Platform Settings</h2>
+        <div className="flex flex-wrap gap-6">
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">Commission Rate:</label>
+            <input
+              type="number" min="0" max="100" step="0.5"
+              className="input input-bordered input-sm w-20"
+              value={(commissionRate * 100).toFixed(1)}
+              onChange={(e) => setCommissionRate(Number(e.target.value) / 100)}
+            />
+            <span className="text-sm">%</span>
+            <button className="btn btn-sm btn-primary" onClick={handleSaveCommission}>Save</button>
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">GST Rate:</label>
+            <input
+              type="number" min="0" max="100" step="0.5"
+              className="input input-bordered input-sm w-20"
+              value={(gstRate * 100).toFixed(1)}
+              onChange={(e) => setGstRate(Number(e.target.value) / 100)}
+            />
+            <span className="text-sm">%</span>
+            <button className="btn btn-sm btn-primary" onClick={handleSaveGst}>Save</button>
+          </div>
         </div>
       </div>
 
@@ -210,8 +283,22 @@ const AdminDashboard = () => {
                     <td className="truncate max-w-xs">{user.email}</td>
                     <td><span className="badge badge-primary badge-sm">{user.role?.toUpperCase()}</span></td>
                     <td>{user.mobile || user.phone || '-'}</td>
-                    <td>
-                      <button onClick={() => handleUserDelete(user.id)} className="btn btn-xs btn-error text-white">Delete</button>
+                    <td className="flex items-center gap-2">
+                      <select
+                        className="select select-bordered select-xs"
+                        defaultValue={user.role}
+                        disabled={user.id === currentUser.uid}
+                        onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                      >
+                        <option value="customer">Customer</option>
+                        <option value="seller">Seller</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                      <button
+                        onClick={() => handleUserDelete(user.id)}
+                        disabled={user.id === currentUser.uid}
+                        className="btn btn-xs btn-error text-white"
+                      >Delete</button>
                     </td>
                   </tr>
                 ))}
