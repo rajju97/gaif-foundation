@@ -1,0 +1,3 @@
+## 2024-03-26 - Product Catalog Filtering and Sorting Optimization
+**Learning:** React components containing list filtering and sorting derived from multiple state variables (search query, category, sort order) can suffer from significant performance degradation if string operations (`.toLowerCase()`) are executed inside the array iteration loop for every element on every render.
+**Action:** Always wrap derived filtering and sorting logic in a `useMemo` hook to prevent redundant calculations across renders (like opening a sidebar). Extract invariant calculations (e.g., lowercasing the search query or category) outside the `.filter` loop to compute them exactly once per re-evaluation instead of per array element.
