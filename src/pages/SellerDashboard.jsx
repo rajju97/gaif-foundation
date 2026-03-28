@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getProducts, addProduct, deleteProduct, updateProduct, getOrdersBySeller } from '../services/db';
@@ -285,8 +285,18 @@ const SellerDashboard = () => {
   }
 
   // Stats
-  const totalRevenue = orders.filter(o => o.status === 'delivered').reduce((sum, o) => sum + (o.sellerEarning ?? o.total ?? 0), 0);
-  const pendingOrders = orders.filter(o => o.status === 'pending').length;
+  // Bolt Optimization: Consolidate multiple O(N) filter.reduce and filter.length iterations
+  // into a single O(N) reduce pass, memoizing the result to prevent unnecessary recalculation.
+  const stats = useMemo(() => {
+    return orders.reduce((acc, o) => {
+      if (o.status === 'delivered') {
+        acc.totalRevenue += (o.sellerEarning ?? o.total ?? 0);
+      } else if (o.status === 'pending') {
+        acc.pendingOrders += 1;
+      }
+      return acc;
+    }, { totalRevenue: 0, pendingOrders: 0 });
+  }, [orders]);
 
   return (
     <div className="container mx-auto p-4">
@@ -297,7 +307,7 @@ const SellerDashboard = () => {
         <h1 className="text-3xl font-bold tracking-display">Seller Dashboard</h1>
         <button onClick={() => navigate('/seller-orders')} className="btn btn-primary btn-sm">
           <i className="fas fa-box mr-2"></i> Manage Orders
-          {pendingOrders > 0 && <span className="badge badge-warning ml-2">{pendingOrders}</span>}
+          {stats.pendingOrders > 0 && <span className="badge badge-warning ml-2">{stats.pendingOrders}</span>}
         </button>
       </div>
 
@@ -312,11 +322,11 @@ const SellerDashboard = () => {
           <p className="text-sm text-base-content/60">Total Orders</p>
         </div>
         <div className="bg-surface-lowest p-5 rounded-ds shadow-ambient text-center">
-          <p className="text-2xl font-bold text-yellow-600">{pendingOrders}</p>
+          <p className="text-2xl font-bold text-yellow-600">{stats.pendingOrders}</p>
           <p className="text-sm text-base-content/60">Pending</p>
         </div>
         <div className="bg-surface-lowest p-5 rounded-ds shadow-ambient text-center">
-          <p className="text-2xl font-bold text-green-600">&#8377;{totalRevenue.toFixed(0)}</p>
+          <p className="text-2xl font-bold text-green-600">&#8377;{stats.totalRevenue.toFixed(0)}</p>
           <p className="text-sm text-base-content/60">Revenue</p>
           <p className="text-xs text-gray-400">After platform fee</p>
         </div>
