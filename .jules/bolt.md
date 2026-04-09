@@ -1,0 +1,3 @@
+## 2024-11-20 - [Optimize Admin Dashboard metrics calculation]
+**Learning:** Found sequential array iterations over `orders` in `src/pages/AdminDashboard.jsx` (e.g., `orders.filter(...).reduce(...)`) inside a React component's rendering loop. This creates multiple O(N) passes that run on every render when they can easily be combined.
+**Action:** Consolidate multiple passes calculating related properties (like revenue, commission, and GST) from a single source array into one `reduce` pass, and wrap the result in `useMemo` to prevent calculation on re-renders where the source array hasn't changed.
