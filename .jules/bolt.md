@@ -1,0 +1,3 @@
+## 2024-04-14 - [Consolidating array passes for multiple metrics]
+**Learning:** In `AdminDashboard.jsx`, iterating over the `orders` array multiple times with chained `.filter().reduce()` (e.g., to calculate `totalRevenue`, `commissionAmount`, and `gstAmount` independently) is an O(N) operation repeated 3+ times. For large datasets, this generates unnecessary intermediate arrays and significantly increases iteration time.
+**Action:** When computing multiple aggregates from the same collection and condition, consolidate the passes into a single `.reduce()` that updates an accumulator object holding all metrics. This effectively drops the time by a factor equal to the number of original passes and reduces garbage collection pressure.
