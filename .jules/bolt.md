@@ -1,0 +1,4 @@
+
+## 2024-05-14 - [Optimize ProductsPage React Re-Renders]
+**Learning:** `ProductsPage.jsx` filtered and sorted the entire product array on *every* render. This is particularly problematic because typing in the search box updates the `searchQuery` state character by character, causing rapid re-renders and executing O(N log N) sorting operations sequentially during each keystroke, slowing down the UI noticeably for large datasets.
+**Action:** Always wrap computationally expensive derived state calculations, such as array filtering and sorting, in a `useMemo` hook. This ensures the operations are only recalculated when their specific dependencies (`products`, `searchQuery`, `selectedCategory`, `sortBy`) change, preventing unnecessary work during other state updates or parent re-renders. Furthermore, extracting invariant calculations (like `.toLowerCase()`) outside of tight `filter` loops further reduces overhead.
