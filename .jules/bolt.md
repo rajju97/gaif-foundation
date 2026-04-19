@@ -1,0 +1,3 @@
+## 2024-05-19 - Optimizing redundant filtering chains via useMemo and reduce
+**Learning:** Combining multiple `.filter().reduce()` or `.filter().length` chains into a single O(N) `.reduce()` loop and memoizing the result with `useMemo` significantly lowers main thread blocking on complex list views. Unmemoized computationally heavy operations blocking rendering on every state update significantly throttles UX, but batching iterations dramatically speeds it up.
+**Action:** When deriving multiple categorised values or counts from a single array, use a single `.reduce` pass to build an accumulator object rather than chaining independent `.filter` passes. Wrap derived filtering and calculating state in `useMemo` hooks.
