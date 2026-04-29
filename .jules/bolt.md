@@ -1,0 +1,3 @@
+## 2024-10-24 - Consolidate O(N) Loops into a Single `reduce` using `useMemo`
+**Learning:** In React components like `AdminDashboard.jsx`, calculating multiple derived metrics (like total revenue, commission, and GST) by repeatedly mapping and filtering the same data structure leads to significant, unnecessary overhead (three O(N) passes instead of one). When the dataset scales up, the repeated array traversals create a measurable bottleneck.
+**Action:** When computing multiple derived metrics from a single source array, consolidate the logic into a single `reduce` pass and wrap the entire operation in a `useMemo` hook to ensure the calculation only happens once per array change, dramatically improving rendering performance.
