@@ -1,0 +1,3 @@
+## 2024-05-04 - Memoize derived catalog state
+**Learning:** In a product catalog like `ProductsPage.jsx`, computing the filtered and sorted product list on every render causes unnecessary operations, especially when other state updates (like sidebar opening/closing) trigger re-renders. Also, invariant string operations inside `filter` callbacks slow down the process when the array size scales.
+**Action:** Always wrap derived state operations like filtering/sorting in `useMemo` for components with frequent re-renders or large lists. Extract invariant string operations outside the loop to minimize the overhead per item.
