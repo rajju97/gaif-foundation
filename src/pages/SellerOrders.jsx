@@ -62,6 +62,12 @@ const SellerOrders = () => {
         return null;
     };
 
+    const orderCounts = orders.reduce((acc, o) => {
+        acc[o.status] = (acc[o.status] || 0) + 1;
+        acc.all = (acc.all || 0) + 1;
+        return acc;
+    }, {});
+
     const filteredOrders = filter === 'all' ? orders : orders.filter(o => o.status === filter);
 
     if (loading) return <div className="flex justify-center items-center h-64"><span className="loading loading-spinner loading-lg"></span></div>;
@@ -81,7 +87,7 @@ const SellerOrders = () => {
                     >
                         {status.charAt(0).toUpperCase() + status.slice(1)}
                         {status !== 'all' && (
-                            <span className="ml-1 badge badge-sm">{orders.filter(o => o.status === status).length}</span>
+                            <span className="ml-1 badge badge-sm">{orderCounts[status] || 0}</span>
                         )}
                     </button>
                 ))}
@@ -90,19 +96,19 @@ const SellerOrders = () => {
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-ds text-center">
-                    <p className="text-2xl font-bold text-yellow-600">{orders.filter(o => o.status === 'pending').length}</p>
+                    <p className="text-2xl font-bold text-yellow-600">{orderCounts['pending'] || 0}</p>
                     <p className="text-sm text-base-content/60">Pending</p>
                 </div>
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-ds text-center">
-                    <p className="text-2xl font-bold text-blue-600">{orders.filter(o => o.status === 'confirmed').length}</p>
+                    <p className="text-2xl font-bold text-blue-600">{orderCounts['confirmed'] || 0}</p>
                     <p className="text-sm text-base-content/60">Confirmed</p>
                 </div>
                 <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-ds text-center">
-                    <p className="text-2xl font-bold text-purple-600">{orders.filter(o => o.status === 'shipped').length}</p>
+                    <p className="text-2xl font-bold text-purple-600">{orderCounts['shipped'] || 0}</p>
                     <p className="text-sm text-base-content/60">Shipped</p>
                 </div>
                 <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-ds text-center">
-                    <p className="text-2xl font-bold text-green-600">{orders.filter(o => o.status === 'delivered').length}</p>
+                    <p className="text-2xl font-bold text-green-600">{orderCounts['delivered'] || 0}</p>
                     <p className="text-sm text-base-content/60">Delivered</p>
                 </div>
             </div>
