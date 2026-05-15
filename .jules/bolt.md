@@ -1,0 +1,3 @@
+## 2024-05-15 - [Product Filter useMemo Optimization]
+**Learning:** High-frequency rendering paths filtering arrays on each re-render can be significantly optimized by extracting invariant properties (like string lowering) outside the `filter` loop and memoizing the result with `useMemo`. When applying these micro-optimizations, it is essential to trace exactly what is computed inside the loop and eliminate redundancies to ensure speedup without altering behavior.
+**Action:** Always inspect complex filtering or sorting logic during frontend performance evaluations. Pull fixed/derived string operations (like `toLowerCase()`) to the top, run them once, and wrap the entire process in `useMemo` with minimal dependencies.
