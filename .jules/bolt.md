@@ -1,0 +1,3 @@
+## 2024-05-21 - Optimize Financial Metric Calculations in Admin Dashboard
+**Learning:** In the `AdminDashboard.jsx`, multiple O(N) filtering and reduction passes over large order arrays were used to calculate individual financial metrics (`revenue`, `commission`, `gst`) inline. The `totalRevenue` metric was also calculated repeatedly. This causes unnecessary overhead as the dataset grows.
+**Action:** Replace sequential filter/reduce chains with a single O(N) `reduce` pass that computes all derived metrics simultaneously. Wrap this operation in `useMemo` to cache the results and avoid recalculation on every render.
