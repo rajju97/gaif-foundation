@@ -1,0 +1,3 @@
+## 2024-06-03 - Optimize multiple array iterations with single-pass reduce
+**Learning:** In dashboards computing multiple aggregate metrics (e.g., revenue, commission, pending orders counts) from the same data array, chaining multiple `.filter()` and `.reduce()` operations creates redundant O(N) passes. This was observed in `AdminDashboard.jsx` and `SellerDashboard.jsx`.
+**Action:** Consolidate these operations into a single `.reduce()` pass returning an accumulator object with all the metrics, and wrap it in `useMemo` to prevent recalculation on unrelated re-renders. This provides a significant performance boost for large datasets by minimizing iterations and optimizing React rendering cycles.
