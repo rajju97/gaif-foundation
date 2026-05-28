@@ -1,0 +1,3 @@
+## 2024-05-24 - Consolidating redundant array iterations in React components
+**Learning:** Redundant iterations over the same large dataset (e.g. multiple `filter` and `reduce` chains) can cause significant rendering delays in React when calculated inline. In this codebase, metrics like revenue, commission, and GST were independently filtered and reduced sequentially.
+**Action:** When calculating multiple derived statistics from a single dataset, consolidate the iterations into a single `reduce` pass that returns an accumulator object containing all metrics. Wrap this operation in `useMemo` to prevent unnecessary recalculations on every render.
