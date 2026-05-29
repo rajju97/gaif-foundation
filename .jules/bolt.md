@@ -1,0 +1,3 @@
+## 2024-05-29 - Optimize Product Catalog Filtering with useMemo
+**Learning:** In React applications, performing computationally expensive derived states, such as filtering and sorting a large array of products (`ProductsPage`), directly in the component body causes it to run on every re-render (e.g., when unrelated state changes or parent renders). This can cause significant main thread blocking on large datasets.
+**Action:** Always wrap expensive derived array operations (like sequential `.filter().sort()`) in a `useMemo` hook with the appropriate dependency array (`[products, searchQuery, selectedCategory, sortBy]`) to ensure the calculation only runs when the specific inputs change.
