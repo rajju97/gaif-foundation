@@ -1,0 +1,3 @@
+## 2024-06-06 - AdminDashboard Metrics Optimization
+**Learning:** Consolidating multiple array filter and reduce operations into a single reduce pass (O(N) instead of O(3N)) provides significant performance gains for calculating derived metrics like revenue, commission, and GST from a large array of orders. Memoizing this computation ensures it only runs when the base data changes.
+**Action:** When calculating multiple aggregate metrics from the same dataset in a React component, use `useMemo` with a single `reduce` pass returning an accumulator object instead of multiple `filter`/`reduce` chains.
