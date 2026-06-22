@@ -1,0 +1,3 @@
+## 2024-05-23 - Consolidating Array Operations in Admin Dashboard
+**Learning:** In the `AdminDashboard.jsx`, computing multiple aggregate statistics (revenue, commission, GST) by chaining multiple `filter` and `reduce` operations sequentially on the `orders` array causes O(3N) time complexity and redundant processing. When dealing with thousands of orders, this is a significant bottleneck. Moreover, these calculations were executing on every component re-render.
+**Action:** Consolidate multiple array operations (like sequential `filter` and `reduce`) into a single `reduce` pass returning an accumulator object to minimize iterations. Always wrap these operations in `useMemo` within React components to prevent recalculation on unrelated re-renders.
