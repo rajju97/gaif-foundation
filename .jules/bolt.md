@@ -1,0 +1,3 @@
+## 2024-06-26 - [Optimize Admin Dashboard Metrics Calculation]
+**Learning:** Performing multiple chained `filter` and `reduce` operations on a single array (e.g., `orders.filter(...).reduce(...)` repeated 3 times) results in unnecessary O(N) traversals. In React components, without memoization, this recalculates on every render.
+**Action:** Consolidate multiple array metrics extractions into a single `reduce` pass returning an accumulator object (`{ revenue: 0, commission: 0, gst: 0 }`) and wrap it in `useMemo` to significantly reduce execution time and avoid recalculation on unrelated state updates.
