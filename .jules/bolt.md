@@ -1,0 +1,3 @@
+## 2024-07-04 - [Single Pass Map/Reduce Optimization]
+**Learning:** For rendering data components like Dashboards, performing multiple sequential `.filter()` and `.reduce()` operations over the same large array scales poorly (O(K*N) complexity). In this case, extracting revenue, commission, and GST required 3 separate passes over the `orders` array.
+**Action:** Consolidate multiple array operations into a single `.reduce()` pass returning an accumulator object whenever deriving multiple categorized metrics from one dataset. Wrap the result in `useMemo` to prevent O(N) operations during unrelated re-renders.
