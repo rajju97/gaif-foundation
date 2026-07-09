@@ -22,47 +22,80 @@ service cloud.firestore {
       return isSignedIn() && getUserRole() == 'seller';
     }
 
-    // Users — only the owner or an admin can read a user doc; only the owner can write their own doc
+    // Users — only the owner or an admin can read a user doc.
+    // Create: owner only, and cannot self-assign the admin role.
+    // Update: owner may edit their own profile but never their own role;
+    // an admin may change ONLY the role (+updatedAt) of any user.
+    // Delete: admins only.
     match /users/{userId} {
       allow read: if isSignedIn() && (isOwner(userId) || isAdmin());
-      allow create: if isSignedIn() && isOwner(userId);
-      allow update: if isSignedIn() && isOwner(userId)
-                    && (!request.resource.data.keys().hasAny(['role'])
-                        || request.resource.data.role == resource.data.role);
-      allow delete: if false;
+      allow create: if isSignedIn() && isOwner(userId)
+                    && request.resource.data.role in ['customer', 'seller'];
+      allow update: if isSignedIn()
+                    && (
+                      (isOwner(userId)
+                        && (!request.resource.data.keys().hasAny(['role'])
+                            || request.resource.data.role == resource.data.role))
+                      || (isAdmin()
+                          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'updatedAt'])
+                          && request.resource.data.role in ['customer', 'seller', 'admin'])
+                    );
+      allow delete: if isAdmin();
     }
 
-    // Products — public read; sellers can only create/update/delete their own products; admins can delete any
+    // Products — public read; sellers can only create/update/delete their own products; admins can update/delete any.
+    // Any signed-in buyer may also decrement (never increase) the quantity field to reflect stock sold.
     match /products/{productId} {
       allow read: if true;
       allow create: if isSignedIn() && (isSeller() || isAdmin())
                     && request.resource.data.sellerId == request.auth.uid;
       allow update: if isSignedIn()
-                    && (resource.data.sellerId == request.auth.uid || isAdmin());
+                    && (
+                      resource.data.sellerId == request.auth.uid || isAdmin()
+                      || (
+                        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['quantity'])
+                        && request.resource.data.quantity is int
+                        && request.resource.data.quantity >= 0
+                        && request.resource.data.quantity < resource.data.quantity
+                      )
+                    );
       allow delete: if isSignedIn()
                     && (resource.data.sellerId == request.auth.uid || isAdmin());
     }
 
-    // Orders — buyers and sellers can only access their own orders; admins can access all
+    // Orders — buyers and sellers can only access their own orders; admins can access all.
+    // Create requires a positive total and must always start out 'pending'.
     match /orders/{orderId} {
       allow read: if isSignedIn()
                   && (resource.data.buyerId == request.auth.uid
                       || resource.data.sellerId == request.auth.uid
                       || isAdmin());
       allow create: if isSignedIn()
-                    && request.resource.data.buyerId == request.auth.uid;
+                    && request.resource.data.buyerId == request.auth.uid
+                    && request.resource.data.status == 'pending'
+                    && request.resource.data.total is number
+                    && request.resource.data.total > 0;
       allow update: if isSignedIn()
                     && (resource.data.sellerId == request.auth.uid || isAdmin())
                     && request.resource.data.diff(resource.data).affectedKeys()
                        .hasOnly(['status', 'updatedAt']);
     }
 
-    // Reviews — public read; authenticated users can create their own reviews only
+    // Reviews — public read; authenticated users can create their own reviews only, with a rating in [1, 5]
     match /reviews/{reviewId} {
       allow read: if true;
       allow create: if isSignedIn()
-                    && request.resource.data.userId == request.auth.uid;
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.rating is number
+                    && request.resource.data.rating >= 1
+                    && request.resource.data.rating <= 5;
       allow update, delete: if false;
+    }
+
+    // Config — platform-wide commission/GST rates; publicly readable, admin-only writable
+    match /config/{document} {
+      allow read: if true;
+      allow write: if isAdmin();
     }
   }
 }

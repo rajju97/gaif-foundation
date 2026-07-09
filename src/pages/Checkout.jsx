@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { createOrder, getProductById, getCommissionRate, getGstRate } from '../services/db';
+import { createOrder, getProductById, getCommissionRate, getGstRate, decrementProductStock } from '../services/db';
 import { clearCart } from '../dispatchers';
 import Notification from '../components/Notification';
 
@@ -109,6 +109,11 @@ const Checkout = () => {
             );
 
             const verifiedTotal = verifiedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            // Reserve stock atomically so concurrent checkouts can't oversell the same product
+            await Promise.all(
+                verifiedItems.map((item) => decrementProductStock(item.productId, item.quantity))
+            );
 
             let paymentId = null;
             let paymentStatus = 'cod';

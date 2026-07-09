@@ -10,7 +10,8 @@ import {
     setDoc,
     query,
     where,
-    serverTimestamp
+    serverTimestamp,
+    runTransaction
 } from "firebase/firestore";
 
 const productsCollection = collection(db, "products");
@@ -42,6 +43,20 @@ export const getProductById = async (id) => {
         return { ...productDoc.data(), id: productDoc.id };
     }
     return null;
+};
+
+// Atomically decrements stock so concurrent buyers can't oversell the same product.
+export const decrementProductStock = async (productId, amount) => {
+    const productRef = doc(db, "products", productId);
+    await runTransaction(db, async (transaction) => {
+        const productSnap = await transaction.get(productRef);
+        if (!productSnap.exists()) throw new Error("Product not found.");
+        const currentQty = productSnap.data().quantity ?? 0;
+        if (currentQty < amount) {
+            throw new Error(`Insufficient stock for "${productSnap.data().name}". Available: ${currentQty}.`);
+        }
+        transaction.update(productRef, { quantity: currentQty - amount });
+    });
 };
 
 export const updateProduct = async (id, data, currentUserId) => {
