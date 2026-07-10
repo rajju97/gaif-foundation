@@ -1,0 +1,3 @@
+## 2024-05-24 - Consolidating multiple array map/reduce passes in React components
+**Learning:** In `AdminDashboard.jsx`, there were three separate `.filter(...).reduce(...)` loops running over the `orders` array on every render to calculate total revenue, commission, and GST. This causes multiple redundant array iterations and allocations, scaling poorly with the number of orders (O(3N) instead of O(N)).
+**Action:** When deriving multiple metrics from a single array in React components, combine them into a single `.reduce()` pass that returns an accumulator object containing all metrics. Wrap this operation in `useMemo` with the source array as a dependency to prevent recalculation on unrelated re-renders.
