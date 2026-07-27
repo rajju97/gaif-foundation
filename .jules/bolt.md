@@ -1,0 +1,3 @@
+## 2024-04-20 - [Memoizing Array Operations in React]
+**Learning:** Frequent array filtering and sorting operations on frequently rendering components (like search pages) can be a significant hidden performance bottleneck if not memoized, particularly when dealing with unbounded catalog lists. Moving string `.toLowerCase()` extractions outside the inner `filter` loop also yields micro-optimizations that stack up.
+**Action:** Always wrap derived filtering/sorting calculations in `useMemo` for any product catalog or data grid, especially when they depend on search inputs or multiple filter states. Extract invariant operations out of iteration loops.
