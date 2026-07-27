@@ -1,0 +1,3 @@
+## 2024-04-26 - React useMemo & Hoisting string operations in arrays
+**Learning:** In React components dealing with large dataset client-side filtering/sorting (like the product catalog), calculating derived states on every render without memoization and without hoisting invariant string operations (like `.toLowerCase()`) leads to substantial main thread blocking, which can drop rendering frame rates during text input.
+**Action:** Always wrap array filtering/sorting inside `useMemo` with proper dependencies, and crucially, pull string allocations and conversions (like `.toLowerCase()`) completely outside of the inner `.filter` iterations.

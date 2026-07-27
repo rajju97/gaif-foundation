@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getProducts } from '../services/db';
@@ -50,23 +50,31 @@ const ProductsPage = () => {
         alert(`${product.name} added to cart!`);
     };
 
-    const filteredProducts = products
-        .filter(p => {
-            const matchesSearch = !searchQuery ||
-                p.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                p.description?.toLowerCase().includes(searchQuery.toLowerCase());
-            const matchesCategory = selectedCategory === 'all' ||
-                p.category?.toLowerCase() === selectedCategory.toLowerCase();
-            return matchesSearch && matchesCategory;
-        })
-        .sort((a, b) => {
-            switch (sortBy) {
-                case 'price-low': return (a.price || 0) - (b.price || 0);
-                case 'price-high': return (b.price || 0) - (a.price || 0);
-                case 'name': return (a.name || '').localeCompare(b.name || '');
-                default: return 0;
-            }
-        });
+    // Memoize the filtered and sorted products to prevent unnecessary recalculations on re-renders
+    const filteredProducts = useMemo(() => {
+        // Extract invariant string operations outside the loop to minimize overhead
+        const query = (searchQuery || '').toLowerCase();
+        const category = (selectedCategory || '').toLowerCase();
+        const isAllCategories = category === 'all';
+
+        return products
+            .filter(p => {
+                const matchesSearch = !query ||
+                    p.name?.toLowerCase().includes(query) ||
+                    p.description?.toLowerCase().includes(query);
+                const matchesCategory = isAllCategories ||
+                    p.category?.toLowerCase() === category;
+                return matchesSearch && matchesCategory;
+            })
+            .sort((a, b) => {
+                switch (sortBy) {
+                    case 'price-low': return (a.price || 0) - (b.price || 0);
+                    case 'price-high': return (b.price || 0) - (a.price || 0);
+                    case 'name': return (a.name || '').localeCompare(b.name || '');
+                    default: return 0;
+                }
+            });
+    }, [products, searchQuery, selectedCategory, sortBy]);
 
     const FilterSidebar = () => (
         <aside className="w-full">
