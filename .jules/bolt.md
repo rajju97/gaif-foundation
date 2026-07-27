@@ -1,0 +1,3 @@
+## 2024-05-08 - [Extracted invariant operations outside filter callbacks]
+**Learning:** Extracting invariant string operations like `.toLowerCase()` outside an array `.filter()` callback significantly reduces overhead and execution time, avoiding redundant function calls on invariant state.
+**Action:** Extract loop-invariant string operations (like `toLowerCase()`) to variables outside the `.filter()`, `.map()`, or `.sort()` loop to minimize unnecessary repeated processing, particularly for product catalogs or frequent state updates, and wrap derived state in `useMemo` to prevent unneeded recalculations during re-renders.
