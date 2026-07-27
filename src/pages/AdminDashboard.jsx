@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getProducts, getAllUsers, getAllOrders, deleteProduct, deleteUser, updateOrderStatus, updateUserRole, getCommissionRate, updateCommissionRate, getGstRate, updateGstRate } from '../services/db';
 import { useAuth } from '../context/AuthContext';
 import Notification from '../components/Notification';
@@ -135,8 +135,20 @@ const AdminDashboard = () => {
     }
   };
 
-  const totalRevenue = orders.filter(o => o.status === 'delivered').reduce((sum, o) => sum + (o.total || 0), 0);
-  const sellers = users.filter(u => u.role === 'seller');
+  const { totalRevenue, totalCommission, totalGst } = useMemo(() => {
+    let rev = 0, comm = 0, gst = 0;
+    for (let i = 0; i < orders.length; i++) {
+      const o = orders[i];
+      if (o.status === 'delivered') {
+        rev += o.total || 0;
+        comm += o.commissionAmount || 0;
+        gst += o.gstAmount || 0;
+      }
+    }
+    return { totalRevenue: rev, totalCommission: comm, totalGst: gst };
+  }, [orders]);
+
+  const sellers = useMemo(() => users.filter(u => u.role === 'seller'), [users]);
 
   if (loading) return <div className="flex justify-center items-center h-64"><span className="loading loading-spinner loading-lg"></span></div>;
 
@@ -170,11 +182,11 @@ const AdminDashboard = () => {
           <p className="text-sm text-on-surface-variant">Revenue</p>
         </div>
         <div className="bg-base-100 p-4 rounded-lg shadow text-center">
-          <p className="text-2xl font-bold text-orange-600">&#8377;{orders.filter(o => o.status === 'delivered').reduce((s, o) => s + (o.commissionAmount || 0), 0).toFixed(0)}</p>
+          <p className="text-2xl font-bold text-orange-600">&#8377;{totalCommission.toFixed(0)}</p>
           <p className="text-sm text-gray-500">Commission</p>
         </div>
         <div className="bg-base-100 p-4 rounded-lg shadow text-center">
-          <p className="text-2xl font-bold text-teal-600">&#8377;{orders.filter(o => o.status === 'delivered').reduce((s, o) => s + (o.gstAmount || 0), 0).toFixed(0)}</p>
+          <p className="text-2xl font-bold text-teal-600">&#8377;{totalGst.toFixed(0)}</p>
           <p className="text-sm text-gray-500">GST Collected</p>
         </div>
       </div>
