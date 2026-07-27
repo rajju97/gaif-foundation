@@ -1,0 +1,4 @@
+
+## 2024-05-03 - Consolidation of Redundant Array Operations
+**Learning:** In dashboards like `SellerOrders.jsx` and `AdminDashboard.jsx`, iterating over the same dataset (e.g., `orders`) repeatedly using `.filter(condition).length` or `.filter(condition).reduce(...)` to compute distinct metrics causes significant rendering bottlenecks, especially as the list size grows. This represents an O(K * N) overhead where K is the number of metrics.
+**Action:** Always consolidate multiple array operations into a single `.reduce` pass to compute a combined metrics object (e.g., `{ pending: 0, delivered: 0 }` or `{ revenue: 0, commission: 0 }`), wrap it in `useMemo`, and destructure the results. This reduces complexity to O(N) while maintaining readability and improving render performance dramatically.
