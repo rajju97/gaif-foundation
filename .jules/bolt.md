@@ -1,0 +1,3 @@
+## 2024-06-03 - Memoize product filtering and sorting in ProductsPage
+**Learning:** The `filteredProducts` array was being derived on every render by applying `.filter()` and `.sort()` to potentially large product lists. Moreover, the string manipulations (`toLowerCase`) for search and category were executed inside the `.filter()` loop, resulting in redundant O(N) operations.
+**Action:** When filtering/sorting lists in React, ALWAYS wrap the derivation logic in `useMemo` with proper dependencies. Furthermore, hoist any invariant computations (like converting search queries to lowercase) outside the filter loop to minimize per-item processing overhead.
