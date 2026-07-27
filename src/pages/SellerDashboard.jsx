@@ -145,11 +145,10 @@ const SellerDashboard = () => {
 
     setUploading(true);
     try {
-      const compressedImages = [];
-      for (const file of files) {
-        const dataUrl = await compressImage(file);
-        compressedImages.push(dataUrl);
-      }
+      // ⚡ Bolt: Compress images concurrently instead of sequentially
+      const compressedImages = await Promise.all(
+        files.map(file => compressImage(file))
+      );
       setFormData(prev => ({ ...prev, images: [...prev.images, ...compressedImages] }));
     } catch (error) {
       console.error('Image processing failed:', error);
