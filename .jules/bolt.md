@@ -1,0 +1,3 @@
+## 2024-05-24 - Optimizing Redundant Array Operations
+**Learning:** Found multiple separate `filter` and `reduce` operations being run sequentially on the exact same array (orders) in `src/pages/AdminDashboard.jsx` to calculate metrics like total revenue, commission, and GST. In JS, sequential operations like this cause unnecessary O(3N) overhead, which can be significant for large arrays on dashboards. Consolidating to a single O(N) `reduce` pass significantly improves performance.
+**Action:** When calculating multiple derived metrics from an array, use a single `reduce` pass returning an accumulator object instead of chaining multiple `filter`/`reduce` pairs, and wrap it in `useMemo` so it doesn't run on every single re-render of a large dashboard.
