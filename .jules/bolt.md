@@ -1,0 +1,3 @@
+## 2024-06-10 - [O(N) consolidation over multiple array filters]
+**Learning:** Performing multiple `filter().reduce()` chains over the same large array sequentially is a performance anti-pattern. While array operations in V8 are fast, traversing the same list multiple times scales poorly as data volume grows, and blocks the single thread longer than necessary.
+**Action:** When deriving multiple aggregated metrics (like revenue, commission, gst) from the same dataset, consolidate them into a single `reduce` pass returning an accumulator object. In React, always wrap these computed aggregations in `useMemo` so that typing into unrelated inputs (like changing platform settings) does not trigger a costly re-calculation.
